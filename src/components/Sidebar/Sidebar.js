@@ -28,10 +28,16 @@ class Sidebar extends Component {
          
          
              <li className="nav-item">
-              <NavLink to={'/sendSms'} className="nav-link" activeClassName="active"><i className="icon-star"></i> 短信发送 </NavLink>
+              <NavLink to={'/sendSms'} className="nav-link" activeClassName="active"><i className="icon-star"></i> 待审核照片 </NavLink>
             </li>
              <li className="nav-item">
-              <NavLink to={'/smsSent'} className="nav-link" activeClassName="active"><i className="icon-calculator"></i> 已发短信 </NavLink>
+              <NavLink to={'/smsSent'} className="nav-link" activeClassName="active"><i className="icon-calculator"></i> 退回照片 </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink to={'/sendSms'} className="nav-link" activeClassName="active"><i className="icon-star"></i> 已审核照片 </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink to={'/admin'} className="nav-link" activeClassName="active"><i className="icon-star"></i> 管理员设置 </NavLink>
             </li>
           
             

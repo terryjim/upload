@@ -17,6 +17,7 @@ const routes = {
   '/icons/simple-line-icons': 'Simple Line Icons',
   '/widgets': 'Widgets',
   '/sendSms':'短信发送',
-  '/smsSent':'已发短信'
+  '/smsSent':'已发短信',
+  '/admin':'管理员设置'
 };
 export default routes;

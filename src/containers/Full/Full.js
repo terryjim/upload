@@ -22,8 +22,9 @@ import SimpleLineIcons from '../../views/Icons/SimpleLineIcons/'
 import { connect } from 'react-redux'
 import SendSms from '../../views/SendSms'
 import SmsSent from '../../views/SmsSent'
+import Admin from '../../views/Admin'
 class Full extends Component {
-  componentWillMount() {
+ /*  componentWillMount() {
     if (this.props.token == null || this.props.token == '') {
       this.props.history.replace('/login')
     }
@@ -32,7 +33,7 @@ class Full extends Component {
     if (this.props.token == null || this.props.token == '') {
       this.props.history.replace('/login')
     }
-  }
+  } */
   render() {
     return (
       <div className="app">
@@ -58,6 +59,7 @@ class Full extends Component {
                 <Route path="/charts" name="Charts" component={Charts} />
                 <Route path="/sendSms" name="Charts" component={SendSms} />
                 <Route path="/smsSent" name="Charts" component={SmsSent} />
+                <Route path="/admin" name="管理员设置" component={Admin} />
                 <Redirect from="/" to="/dashboard" />
               </Switch>
             </div>
