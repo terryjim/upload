@@ -1,15 +1,35 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import Pages from './Pages'
-import {getAdmin} from '../actions'
+import { getAdmin } from '../actions'
+import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardHeader, CardBody, Form, FormGroup, InputGroup, InputGroupAddon, Input } from 'reactstrap';
+
 class Admin extends Component {
-  componentWillMount() {    
+  componentWillMount() {
     this.props.dispatch(getAdmin())
   }
-
+  constructor(props) {
+    super(props);
+    this.state = {
+      showEditUser: false,
+    };
+    // this.toggleShowEditUser = this.toggleShowEditUser.bind(this);
+  }
+  toggleShowEditUser() {
+    this.setState({
+      showEditUser: !this.state.showEditUser,
+    });
+  }
+  bindData(x) {
+    this.setState({
+      loginName: x.loginName,
+      realName: x.realName,
+      showEditUser: !this.state.showEditUser
+    });
+  }
   render() {
-    let admins = this.props.admin 
-        return (
+    let admins = this.props.admin
+    return (
       <div className="animated fadeIn">
 
 
@@ -27,7 +47,7 @@ class Admin extends Component {
                       <th>登录名</th>
                       <th>用户名</th>
                       <th>注册时间</th>
-                      <th>操作</th>
+                      <th>操作{this.state.realName}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -37,7 +57,38 @@ class Admin extends Component {
                           <td>{x.loginName}</td>
                           <td>{x.realName}</td>
                           <td>{x.regDate}</td>
-                          <td>删除</td>
+                          <td>删除<Button color="primary" onClick={() => this.bindData(x)}>修改</Button>
+                            <Modal isOpen={this.state.showEditUser} toggle={()=>this.toggleShowEditUser()}
+                              className={'modal-primary ' + this.props.className}>
+                              <ModalHeader toggle={()=>this.toggleShowEditUser()}>修改用户</ModalHeader>
+                              <ModalBody>
+                                <Form action="" method="post">
+                                  <FormGroup>
+                                    <InputGroup>
+                                      <InputGroupAddon >登录名称</InputGroupAddon>
+                                      <Input type="text" id="loginName" name="loginName" value={this.state.loginName} />
+                                      <InputGroupAddon><i className="fa fa-user"></i></InputGroupAddon>
+                                    </InputGroup>
+                                  </FormGroup>
+                                  <FormGroup>
+                                    <InputGroup>
+                                      <InputGroupAddon >真实姓名</InputGroupAddon>
+                                      <Input type="text" id="realName" name="realName" value={this.state.realName} />
+                                      <InputGroupAddon><i className="fa fa-user"></i></InputGroupAddon>
+                                    </InputGroup>
+                                  </FormGroup>
+
+                                  <FormGroup className="form-actions">
+                                    <Button type="submit" color="primary">保存</Button>&nbsp;&nbsp;
+                    <Button onClick={()=>this.toggleShowEditUser()} color="secondary">取消</Button>
+                                  </FormGroup>
+                                </Form>
+                              </ModalBody>
+                              {/*   <ModalFooter>
+                                <Button color="primary" onClick={this.toggleShowEditUser}>Do Something</Button>{' '}
+                                <Button color="secondary" onClick={this.toggleShowEditUser}>Cancel</Button>
+                              </ModalFooter> */}
+                            </Modal></td>
                         </tr>
                       )
 
@@ -46,7 +97,7 @@ class Admin extends Component {
 
                   </tbody>
                 </table>
-                 </div>
+              </div>
             </div>
           </div>
 
@@ -60,7 +111,7 @@ class Admin extends Component {
 }
 const mapStateToProps = (state) => {
   let admin = state.admin
-  return {admin}
+  return { admin }
 }
 
 
@@ -69,4 +120,11 @@ Admin = connect(
 )(Admin)
 export default Admin;
 
-
+const bindData = (x) => {
+  this.setState({
+    realName: x.realName,
+    loginName: x.loginName
+  }
+  )
+  this.toggleShowEditUser()
+}
