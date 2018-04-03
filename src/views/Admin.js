@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import Pages from './Pages'
 import { getAdmin } from '../actions'
 import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardHeader, CardBody, Form, FormGroup, InputGroup, InputGroupAddon, Input } from 'reactstrap';
-
+import AdminForm from './forms/AdminForm'
 class Admin extends Component {
   componentWillMount() {
     this.props.dispatch(getAdmin())
@@ -26,6 +26,13 @@ class Admin extends Component {
       realName: x.realName,
       showEditUser: !this.state.showEditUser
     });
+   
+  }
+  submit = (values) => {
+    // Do something with the form values
+    console.log(values);
+    this.props.dispatch(saveAdmin(JSON.stringify(value)))
+    this.setState({showEditUser:false})
   }
   render() {
     let admins = this.props.admin
@@ -58,11 +65,11 @@ class Admin extends Component {
                           <td>{x.realName}</td>
                           <td>{x.regDate}</td>
                           <td>删除<Button color="primary" onClick={() => this.bindData(x)}>修改</Button>
-                            <Modal isOpen={this.state.showEditUser} toggle={()=>this.toggleShowEditUser()}
+                            <Modal isOpen={this.state.showEditUser} toggle={() => this.toggleShowEditUser()}
                               className={'modal-primary ' + this.props.className}>
-                              <ModalHeader toggle={()=>this.toggleShowEditUser()}>修改用户</ModalHeader>
+                              <ModalHeader toggle={() => this.toggleShowEditUser()}>修改用户</ModalHeader>
                               <ModalBody>
-                                <Form action="" method="post">
+                                <Form action="" method="post" onSubmit={(e) => this.handleSubmit(e)}>
                                   <FormGroup>
                                     <InputGroup>
                                       <InputGroupAddon >登录名称</InputGroupAddon>
@@ -80,9 +87,10 @@ class Admin extends Component {
 
                                   <FormGroup className="form-actions">
                                     <Button type="submit" color="primary">保存</Button>&nbsp;&nbsp;
-                    <Button onClick={()=>this.toggleShowEditUser()} color="secondary">取消</Button>
+                    <Button onClick={() => this.toggleShowEditUser()} color="secondary">取消</Button>
                                   </FormGroup>
                                 </Form>
+                                <AdminForm onSubmit={this.submit} />
                               </ModalBody>
                               {/*   <ModalFooter>
                                 <Button color="primary" onClick={this.toggleShowEditUser}>Do Something</Button>{' '}
