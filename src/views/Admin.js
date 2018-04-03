@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import Pages from './Pages'
-import { getAdmin } from '../actions'
+import { getAdmin,saveAdmin } from '../actions'
 import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardHeader, CardBody, Form, FormGroup, InputGroup, InputGroupAddon, Input } from 'reactstrap';
 import AdminForm from './forms/AdminForm'
 class Admin extends Component {
@@ -31,7 +31,7 @@ class Admin extends Component {
   submit = (values) => {
     // Do something with the form values
     console.log(values);
-    this.props.dispatch(saveAdmin(JSON.stringify(value)))
+    this.props.dispatch(saveAdmin(JSON.stringify(values)))
     this.setState({showEditUser:false})
   }
   render() {

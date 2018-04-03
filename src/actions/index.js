@@ -18,18 +18,18 @@ export const getAdmin = () => dispatch => {
   let headers = { 'Content-Type': 'application/json' };
 
   //headers.Authorization = WebIM.config.tokenLocal
- 
-  let args = { method: 'GET', mode: 'cors', headers: headers,  cache: 'reload' }
+
+  let args = { method: 'GET', mode: 'cors', headers: headers, cache: 'reload' }
 
   // return dispatch(logined('qwerfasdfasdfasdfasdfasfd'))
   return fetch(window.defaultParams.getAdminUrl, args).then(response => response.json())
     .then(json => {
-     /*  console.log(json) */
-    /*   let ret = json
-      if (ret != null) {
-        ret.map(x => x.created = new Date(parseInt(x.created)).Format('yyyy-MM-dd hh:mm:ss'))
-      }
-      dispatch(getResult(ret)) */
+      /*  console.log(json) */
+      /*   let ret = json
+        if (ret != null) {
+          ret.map(x => x.created = new Date(parseInt(x.created)).Format('yyyy-MM-dd hh:mm:ss'))
+        }
+        dispatch(getResult(ret)) */
       //return dispatch(changePage(json))
       return dispatch(getAdminResult(json))
     }).catch(e => {
@@ -46,6 +46,36 @@ export const getAdminResult = (json) => (
     list: json
   }
 )
+//保存管理员
+export const saveAdmin = (values) => dispatch => {
+  //不能用headers=new Headers()，否则跨域出错
+  /*let headers = { 'Content-Type': 'application/x-www-form-urlencoded' };*/
+  let headers = { 'Content-Type': 'application/json' };
+
+  //headers.Authorization = WebIM.config.tokenLocal
+  let body = JSON.stringify(values)
+  let args = { method: 'POST', mode: 'cors', headers: headers,body, cache: 'reload' }
+
+  // return dispatch(logined('qwerfasdfasdfasdfasdfasfd'))
+  return fetch(window.defaultParams.saveAdminUrl, args).then(response => response.json())
+    .then(json => {
+      /*  console.log(json) */
+      /*   let ret = json
+        if (ret != null) {
+          ret.map(x => x.created = new Date(parseInt(x.created)).Format('yyyy-MM-dd hh:mm:ss'))
+        }
+        dispatch(getResult(ret)) */
+      //return dispatch(changePage(json))
+      return dispatch(getAdminResult(json))
+    }).catch(e => {
+      console.log(e);
+      alert(e)
+      alert('网络异常，请稍后再试！')
+    }
+    )
+}
+
+
 /* export const fetchPages = () => dispatch => {
   //不能用headers=new Headers()，否则跨域出错
   
@@ -110,12 +140,12 @@ export const getSmsByPage = (page) => dispatch => {
   // return dispatch(logined('qwerfasdfasdfasdfasdfasfd'))
   return fetch(window.SMS.config.getSmsListUrl, args).then(response => response.json())
     .then(json => {
-     /*  console.log(json) */
-    /*   let ret = json
-      if (ret != null) {
-        ret.map(x => x.created = new Date(parseInt(x.created)).Format('yyyy-MM-dd hh:mm:ss'))
-      }
-      dispatch(getResult(ret)) */
+      /*  console.log(json) */
+      /*   let ret = json
+        if (ret != null) {
+          ret.map(x => x.created = new Date(parseInt(x.created)).Format('yyyy-MM-dd hh:mm:ss'))
+        }
+        dispatch(getResult(ret)) */
       //return dispatch(changePage(json))
       return dispatch(getResult(json))
     }).catch(e => {
@@ -261,7 +291,7 @@ export const fetchChgPwd = ({ userName, oldPwd, newPwd }) => dispatch => {
     userName, oldPwd, newPwd
   })
   console.log(body)
-  let args = { method: 'POST', mode: 'cors', headers: headers, body:body, cache: 'reload' }
+  let args = { method: 'POST', mode: 'cors', headers: headers, body: body, cache: 'reload' }
 
   return fetch(window.SMS.config.getChgPwdUrl, args).then(response => response.text())
     .then(json => {
@@ -275,7 +305,7 @@ export const fetchChgPwd = ({ userName, oldPwd, newPwd }) => dispatch => {
         return null
       } else {
         alert('密码修改成功！')
-        return dispatch(chgPwdSuccess())       
+        return dispatch(chgPwdSuccess())
       }
     }).catch(e => {
       console.log(e);

@@ -7,7 +7,7 @@ class AdminForm extends Component {
     const { handleSubmit, closeWindow } = this.props;
     return (
       <form onSubmit={handleSubmit}>
-      <Field name="id" component="input" type="text" value="12"/>
+      <Field name="id" component="input" type="number" value="12"/>
         <FormGroup>
           <InputGroup>
             <InputGroupAddon >登录名称</InputGroupAddon>

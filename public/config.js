@@ -14,7 +14,8 @@ SMS.config = {
 }
 const defaultUrl = "http://localhost/"
 const defaultParams = {
-    getAdminUrl: defaultUrl + 'admin/getAll'
+    getAdminUrl: defaultUrl + 'admin/getAll',
+    saveAdminUrl:defaultUrl + 'admin/save',
 
 }
 window.defaultParams = defaultParams
