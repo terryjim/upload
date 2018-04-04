@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import Pages from './Pages'
-import { getAdmin,saveAdmin } from '../actions'
+import { getAdmin,saveAdmin,getAdminInfo } from '../actions'
 import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardHeader, CardBody, Form, FormGroup, InputGroup, InputGroupAddon, Input } from 'reactstrap';
 import AdminForm from './forms/AdminForm'
 class Admin extends Component {
@@ -20,14 +20,14 @@ class Admin extends Component {
       showEditUser: !this.state.showEditUser,
     });
   }
-  bindData(x) {
+ /*  bindData(x) {
     this.setState({
       loginName: x.loginName,
       realName: x.realName,
       showEditUser: !this.state.showEditUser
     });
    
-  }
+  } */
   submit = (values) => {
     // Do something with the form values
     console.log(values);
@@ -64,7 +64,7 @@ class Admin extends Component {
                           <td>{x.loginName}</td>
                           <td>{x.realName}</td>
                           <td>{x.regDate}</td>
-                          <td>删除<Button color="primary" onClick={() => this.bindData(x)}>修改</Button>
+                          <td>删除<Button color="primary" onClick={() =>{this.props.dispatch(getAdminInfo(x));this.setState({showEditUser:true})}}>修改</Button>
                             <Modal isOpen={this.state.showEditUser} toggle={() => this.toggleShowEditUser()}
                               className={'modal-primary ' + this.props.className}>
                               <ModalHeader toggle={() => this.toggleShowEditUser()}>修改用户</ModalHeader>
@@ -90,7 +90,7 @@ class Admin extends Component {
                     <Button onClick={() => this.toggleShowEditUser()} color="secondary">取消</Button>
                                   </FormGroup>
                                 </Form>
-                                <AdminForm onSubmit={this.submit} />
+                                <AdminForm onSubmit={this.submit} closeWindow="alert(1)"/>
                               </ModalBody>
                               {/*   <ModalFooter>
                                 <Button color="primary" onClick={this.toggleShowEditUser}>Do Something</Button>{' '}

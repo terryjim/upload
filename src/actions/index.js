@@ -46,6 +46,15 @@ export const getAdminResult = (json) => (
     list: json
   }
 )
+//根据指定条件获取sms记录
+export const getAdminInfo = (json) => (
+  {
+    type: 'GET_ADMIN_INFO',
+    data: json
+  }
+)
+
+
 //保存管理员
 export const saveAdmin = (values) => dispatch => {
   //不能用headers=new Headers()，否则跨域出错
