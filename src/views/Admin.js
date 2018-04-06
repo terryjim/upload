@@ -29,7 +29,7 @@ class Admin extends Component {
    
   } */
   submit = (values) => {
-    // Do something with the form values
+    // Do something with the form values    
     console.log(values);
     this.props.dispatch(saveAdmin(JSON.stringify(values)))
     this.setState({showEditUser:false})
@@ -90,7 +90,7 @@ class Admin extends Component {
                     <Button onClick={() => this.toggleShowEditUser()} color="secondary">取消</Button>
                                   </FormGroup>
                                 </Form>
-                                <AdminForm onSubmit={this.submit} closeWindow="alert(1)"/>
+                                <AdminForm onSubmit={this.submit}/>
                               </ModalBody>
                               {/*   <ModalFooter>
                                 <Button color="primary" onClick={this.toggleShowEditUser}>Do Something</Button>{' '}
