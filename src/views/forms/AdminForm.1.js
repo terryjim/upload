@@ -4,6 +4,7 @@ import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, Card, Car
 import { connect } from 'react-redux'
 const validate = values => {
   const errors = {}
+  errors.loginName = '登录名不能为空!!!!!'
   if (!values.loginName) {
     errors.loginName = '登录名不能为空'
   }
@@ -24,94 +25,39 @@ const validate = values => {
 
 const warn = values => {
   const warnings = {}
- /*  if (values.loginName.length() >10) {
-    warnings.loginName = '你年龄还有点小哦！'
-  } */
+  if (values.age < 19) {
+    warnings.age = '你年龄还有点小哦！'
+  }
   return warnings
 }
 
-{/* <div>
-        <label>真实姓名</label>
-        <div>
-          <Field
-            name="realName"
-            component="renderField"
-            type="text"
-            placeholder="真实姓名"
-          />
-        </div>
-      </div> */}
-
-      const renderField = ({ input, label, type, meta: { touched, error } }) => (
-        <div>
-          <label>{label}</label>
-          <div>
-            <input {...input} placeholder={label} type={type} />
-            {touched && error && <span>{error}</span>}
-          </div>
-        </div>
-      )
-
-let AdminForm = props => { 
-  const {error,handleSubmit, pristine, reset, submitting } = props;
+let AdminForm = props => {
+  const { handleSubmit, pristine, reset, submitting } = props;
   return (
     <form onSubmit={handleSubmit} >
-      <Field name="id"  component={renderField} type="text" label="id"/>
-      {/* <FormGroup>
+      <Field name="id" component="input" type="hidden" />
+      <FormGroup>
         <InputGroup>
-          <InputGroupAddon >登录名称</InputGroupAddon>          
+          <InputGroupAddon >登录名称</InputGroupAddon>
+          {/* <Input type="text" id="loginName" name="loginName"  /> */}
           <Field name="loginName" component="Input" type="text" />
           <InputGroupAddon><i className="fa fa-user"></i></InputGroupAddon>
         </InputGroup>
       </FormGroup>
       <FormGroup>
         <InputGroup>
-          <InputGroupAddon >真实姓名</InputGroupAddon>         
+          <InputGroupAddon >真实姓名</InputGroupAddon>
+          {/* <Input type="text" id="realName" name="realName"  /> */}
           <Field name="realName" component="input" type="text" />
           <InputGroupAddon><i className="fa fa-user"></i></InputGroupAddon>
         </InputGroup>
       </FormGroup>
 
-      <FormGroup className="form-actions">
+      {/* <FormGroup className="form-actions"> */}
         <button type="submit"  disabled={pristine || submitting} >保存</button>&nbsp;&nbsp;
                     <Button  disabled={pristine || submitting} onClick={reset} color="secondary">取消</Button>
                    
-      </FormGroup> */}
-        {/*  <div>
-        <label>登录名称</label>
-        <div> */}
-          <Field
-            name="loginName"
-            component={renderField}
-            type="text"
-            label="登录名称"
-          />
-       {/*  </div>
-      </div>
-      <div>
-        <label>真实姓名</label>
-        <div> */}
-          <Field
-            name="realName"
-            component={renderField}
-            type="text"
-            label="真实姓名"
-          />
-          
-       {/*  </div>
-      </div> */}
-      {error && <strong>{error}</strong>}
-      <div>
-        <button type="submit" disabled={pristine || submitting}>
-          提交
-        </button>
-        <button type="button" disabled={pristine || submitting} onClick={reset}>
-          重置还原
-        </button>
-      </div>
-    
-
-
+    {/*   </FormGroup> */}
       {/*   <div>
           <label htmlFor="firstName">First Name</label>
           <Field name="firstName" component="input" type="text"/>
@@ -137,8 +83,8 @@ let AdminForm = props => {
 // Decorate the form component
 AdminForm = reduxForm({
   form: 'admin', // a unique name for this form
-  validate,                // 上面定义的一个验证函数，使redux-form同步验证
-  warn
+  //validate,                // 上面定义的一个验证函数，使redux-form同步验证
+  //warn
 })(AdminForm);
 AdminForm = connect(
   state => ({

@@ -4,6 +4,7 @@ import Pages from './Pages'
 import { getAdmin,saveAdmin,getAdminInfo } from '../actions'
 import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardHeader, CardBody, Form, FormGroup, InputGroup, InputGroupAddon, Input } from 'reactstrap';
 import AdminForm from './forms/AdminForm'
+import SubmitValidationForm from './forms/SubmitValidationForm'
 class Admin extends Component {
   componentWillMount() {
     this.props.dispatch(getAdmin())
@@ -38,8 +39,8 @@ class Admin extends Component {
     let admins = this.props.admin
     return (
       <div className="animated fadeIn">
-
-
+<SubmitValidationForm />
+<AdminForm/>
         <div className="row">
 
           <div className="col-lg-12">
@@ -64,12 +65,12 @@ class Admin extends Component {
                           <td>{x.loginName}</td>
                           <td>{x.realName}</td>
                           <td>{x.regDate}</td>
-                          <td>删除<Button color="primary" onClick={() =>{this.props.dispatch(getAdminInfo(x));this.setState({showEditUser:true})}}>修改</Button>
+                          <td><Button color="danger" size="sm">删除</Button> <Button color="primary"  size="sm" onClick={() =>{this.props.dispatch(getAdminInfo(x));this.setState({showEditUser:true})}}>修改</Button>
                             <Modal isOpen={this.state.showEditUser} toggle={() => this.toggleShowEditUser()}
                               className={'modal-primary ' + this.props.className}>
                               <ModalHeader toggle={() => this.toggleShowEditUser()}>修改用户</ModalHeader>
                               <ModalBody>
-                                <Form action="" method="post" onSubmit={(e) => this.handleSubmit(e)}>
+                                {/* <Form action="" method="post" onSubmit={(e) => this.handleSubmit(e)}>
                                   <FormGroup>
                                     <InputGroup>
                                       <InputGroupAddon >登录名称</InputGroupAddon>
@@ -89,7 +90,7 @@ class Admin extends Component {
                                     <Button type="submit" color="primary">保存</Button>&nbsp;&nbsp;
                     <Button onClick={() => this.toggleShowEditUser()} color="secondary">取消</Button>
                                   </FormGroup>
-                                </Form>
+                                </Form> */}
                                 <AdminForm onSubmit={this.submit}/>
                               </ModalBody>
                               {/*   <ModalFooter>
@@ -105,6 +106,9 @@ class Admin extends Component {
 
                   </tbody>
                 </table>
+
+                //////////////////////////////
+                <AdminForm onSubmit={this.submit}/>
               </div>
             </div>
           </div>
