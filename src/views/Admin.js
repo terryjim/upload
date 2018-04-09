@@ -39,8 +39,6 @@ class Admin extends Component {
     let admins = this.props.admin
     return (
       <div className="animated fadeIn">
-<SubmitValidationForm />
-<AdminForm/>
         <div className="row">
 
           <div className="col-lg-12">
@@ -108,7 +106,7 @@ class Admin extends Component {
                 </table>
 
                 //////////////////////////////
-                <AdminForm onSubmit={this.submit}/>
+               {/*  <AdminForm onSubmit={this.submit}/> */}
               </div>
             </div>
           </div>

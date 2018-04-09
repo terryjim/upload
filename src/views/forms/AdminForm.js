@@ -56,7 +56,7 @@ let AdminForm = props => {
   const {error,handleSubmit, pristine, reset, submitting } = props;
   return (
     <form onSubmit={handleSubmit} >
-      <Field name="id"  component={renderField} type="text" label="id"/>
+      <Field name="id"  component="input" type="hidden" label="id"/>
       {/* <FormGroup>
         <InputGroup>
           <InputGroupAddon >登录名称</InputGroupAddon>          

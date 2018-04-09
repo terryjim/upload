@@ -62,8 +62,9 @@ export const saveAdmin = (values) => dispatch => {
   let headers = { 'Content-Type': 'application/json' };
 
   //headers.Authorization = WebIM.config.tokenLocal
-  let body = JSON.stringify(values)
-  let args = { method: 'POST', mode: 'cors', headers: headers,body, cache: 'reload' }
+//let body = JSON.stringify(values) 
+let body = values 
+let args = { method: 'POST', mode: 'cors', headers: headers,body, cache: 'reload' }
 
   // return dispatch(logined('qwerfasdfasdfasdfasdfasfd'))
   return fetch(window.defaultParams.saveAdminUrl, args).then(response => response.json())
