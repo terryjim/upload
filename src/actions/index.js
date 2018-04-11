@@ -24,14 +24,12 @@ export const getAdmin = () => dispatch => {
   // return dispatch(logined('qwerfasdfasdfasdfasdfasfd'))
   return fetch(window.defaultParams.getAdminUrl, args).then(response => response.json())
     .then(json => {
-      /*  console.log(json) */
-      /*   let ret = json
-        if (ret != null) {
-          ret.map(x => x.created = new Date(parseInt(x.created)).Format('yyyy-MM-dd hh:mm:ss'))
-        }
-        dispatch(getResult(ret)) */
-      //return dispatch(changePage(json))
-      return dispatch(getAdminResult(json))
+      console.log(json)
+      console.log(json.data)
+      if (json.code !== 0)
+        alert(json.msg)
+      else
+        return dispatch(getAdminResult(json.data))
     }).catch(e => {
       console.log(e);
       alert(e)
@@ -62,9 +60,9 @@ export const saveAdmin = (values) => dispatch => {
   let headers = { 'Content-Type': 'application/json' };
 
   //headers.Authorization = WebIM.config.tokenLocal
-//let body = JSON.stringify(values) 
-let body = values 
-let args = { method: 'POST', mode: 'cors', headers: headers,body, cache: 'reload' }
+  //let body = JSON.stringify(values) 
+  let body = values
+  let args = { method: 'POST', mode: 'cors', headers: headers, body, cache: 'reload' }
 
   // return dispatch(logined('qwerfasdfasdfasdfasdfasfd'))
   return fetch(window.defaultParams.saveAdminUrl, args).then(response => response.json())

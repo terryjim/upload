@@ -223,7 +223,7 @@ form {
 
 form > div {
   display: -ms-flexbox;
-  display: flex;
+  /*display: flex;*/
   -ms-flex-flow: row nowrap;
       flex-flow: row nowrap;
   -ms-flex-pack: center;
@@ -232,11 +232,12 @@ form > div {
 }
 
 form > div > label {
-  font-weight: bold;
-  margin-right: 10px;
+  /*font-weight: bold;
   min-width: 150px;
-  text-align: right;
+  text-align: right;*/
+  margin-right: 10px;
   padding: 6px 9px;
+  padding-left: 0;
 }
 
 form > div > div {
@@ -255,7 +256,18 @@ form > div > div > * {
       flex: 1;
   font-size: 16px;
   padding: 5px 8px;
-  border: 1px solid #ccc;
+  color: #3e515b;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #c2cfd6;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+form > div > div > input:focus {
+    background-color: #fff;
+    border-color: #8ad4ee;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(32, 168, 216, 0.25); }
 }
 
 form > div > div > *[type='checkbox'] {
@@ -276,6 +288,9 @@ form > div > div > span {
   border: none;
   font-weight: bold;
   color: #700;
+  font-size: 14px;
+  padding-left: 0;
+  margin-top: 6px;
 }
 
 form > div > div > span:before {
@@ -302,18 +317,22 @@ form > div > div.async-validating:after {
 
 form > div button {
   margin: 10px;
+  margin-left: 0;
 }
 
 form > div button[type='button'] {
   white-space: nowrap;
   display: inline-block;
-  border-radius: 5px;
+  /*border-radius: 5px;
   padding: 10px 15px;
-  font-size: 20px;
+  font-size: 20px;*/
   color: white;
-  background-image: linear-gradient(white, #d5d5d5);
-  border: 1px solid #d5d5d5;
-  color: black;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  /*background-image: linear-gradient(white, #d5d5d5);*/
+  background: #f86c6b;
+  border: none;
+  color: #fff;
 }
 
 form > div button[type='button']:visited {
@@ -321,11 +340,13 @@ form > div button[type='button']:visited {
 }
 
 form > div button[type='button']:hover {
-  background-image: linear-gradient(white, #eee);
+  /*background-image: linear-gradient(white, #eee);*/
+  background: #f64846;
 }
 
 form > div button[type='button']:hover[disabled] {
-  background-image: linear-gradient(white, #d5d5d5);
+  /*background-image: linear-gradient(white, #d5d5d5);*/
+  background: #f64846;
 }
 
 form > div button[type='button']:visited {
@@ -340,12 +361,15 @@ form > div button[type='button'][disabled] {
 form > div button[type='submit'] {
   white-space: nowrap;
   display: inline-block;
-  border-radius: 5px;
+  /*border-radius: 5px;
   padding: 10px 15px;
-  font-size: 20px;
+  font-size: 20px;*/
   color: white;
-  background-image: linear-gradient(#4f93ce, #285f8f);
-  border: 1px solid #285f8f;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  /*background-image: linear-gradient(#4f93ce, #285f8f);*/
+  background: #20a8d8;
+  border: none;
 }
 
 form > div button[type='submit']:visited {
@@ -353,11 +377,13 @@ form > div button[type='submit']:visited {
 }
 
 form > div button[type='submit']:hover {
-  background-image: linear-gradient(#63a0d4, #337ab7);
+  /*background-image: linear-gradient(#63a0d4, #337ab7);*/
+  background: #1b8eb7;
 }
 
 form > div button[type='submit']:hover[disabled] {
-  background-image: linear-gradient(#4f93ce, #285f8f);
+  /*background-image: linear-gradient(#4f93ce, #285f8f);*/
+  background: #1b8eb7;
 }
 
 form > div button[type='submit']:visited {
