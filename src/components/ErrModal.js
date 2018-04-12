@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import Pages from './Pages'
-import { getAdmin, saveAdmin, getAdminInfo } from '../actions'
 import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardHeader, CardBody, Form, FormGroup, InputGroup, InputGroupAddon, Input } from 'reactstrap';
-import AdminForm from './forms/AdminForm'
-import SubmitValidationForm from './forms/SubmitValidationForm'
-const ErrModal = ({ msg, label, type, meta: { touched, error } }) => (
-  <Modal isOpen={this.state.showEditUser} toggle={() => this.toggleShowEditUser()}
-    className={'modal-primary ' + this.props.className}>
-    <ModalHeader toggle={() => this.toggleShowEditUser()}>修改用户</ModalHeader>
+import { closeError } from '../actions/common'
+import TopModal from './TopModal'
+let ErrModal = ({dispatch,show,msg}) => (
+  <TopModal isOpen={show} toggle={() => dispatch(closeError())}
+    /* className={'modal-primary ' + this.props.className} */>
+    <ModalHeader  toggle={() => dispatch(closeError())}>错误</ModalHeader>
     <ModalBody>
       {/* <Form action="" method="post" onSubmit={(e) => this.handleSubmit(e)}>
                                   <FormGroup>
@@ -31,12 +29,25 @@ const ErrModal = ({ msg, label, type, meta: { touched, error } }) => (
                     <Button onClick={() => this.toggleShowEditUser()} color="secondary">取消</Button>
                                   </FormGroup>
                                 </Form> */}
-      <AdminForm onSubmit={this.submit} />
+      
     </ModalBody>
-    {/*   <ModalFooter>
-                                <Button color="primary" onClick={this.toggleShowEditUser}>Do Something</Button>{' '}
-                                <Button color="secondary" onClick={this.toggleShowEditUser}>Cancel</Button>
-                              </ModalFooter> */}
-  </Modal>
+      <ModalFooter>
+                                <Button color="primary" onClick={() => dispatch(closeError())}>关闭</Button>{' '}
+                               {/*  <Button color="secondary" onClick={this.toggleShowEditUser}>Cancel</Button> */}
+                              </ModalFooter>
+  </TopModal>
 )
+
+
+const mapStateToProps = (state) => {
+  let err = state.err
+  let show=err.show
+  let msg=err.msg
+  return {show,msg}
+}
+
+ErrModal = connect(
+  mapStateToProps
+)(ErrModal)
+
 export default ErrModal

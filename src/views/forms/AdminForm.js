@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardHeader, CardBody, Form, FormGroup, InputGroup, InputGroupAddon, Input } from 'reactstrap';
 import { connect } from 'react-redux'
+import {showError } from '../../actions/common'
 const validate = values => {
   const errors = {}
   if (!values.loginName) {
@@ -53,7 +54,7 @@ const warn = values => {
       )
 
 let AdminForm = props => { 
-  const {error,handleSubmit, pristine, reset, submitting } = props;
+  const {dispatch,error,handleSubmit, pristine, reset, submitting } = props;
   return (
     <form onSubmit={handleSubmit} >
       <Field name="id"  component="input" type="hidden" label="id"/>
@@ -107,6 +108,9 @@ let AdminForm = props => {
         </button>
         <button type="button" disabled={pristine || submitting} onClick={reset}>
           重置还原
+        </button>
+        <button type="button"  onClick={()=>dispatch(showError('err!!!!!!!'))}>
+          错误
         </button>
       </div>
     

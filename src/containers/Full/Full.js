@@ -23,6 +23,8 @@ import { connect } from 'react-redux'
 import SendSms from '../../views/SendSms'
 import SmsSent from '../../views/SmsSent'
 import Admin from '../../views/Admin'
+
+import ErrModal from '../../components/ErrModal'
 class Full extends Component {
  /*  componentWillMount() {
     if (this.props.token == null || this.props.token == '') {
@@ -39,6 +41,7 @@ class Full extends Component {
       <div className="app">
         <Header />
         <div className="app-body">
+        <ErrModal/>
           <Sidebar {...this.props} />
           <main className="main">
             <Breadcrumb />

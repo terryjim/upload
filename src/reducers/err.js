@@ -1,13 +1,15 @@
 //短信历史记录列表
-let sample = {'code':0,'msg':''}
+let sample = {show:true,'code':0,'msg':''}
 const err = (state = sample, action) => {
     if (action.type === 'SHOW_ERROR') {       
         if (action.msg != null)
-            state = Object.assign({},action.msg)
-        else
-            state = {}
+            state = Object.assign({},{show:true,msg:action.msg})
+        /* else
+            state = {} */
+    }
+    if (action.type === 'CLOSE_ERROR') { 
+            state = Object.assign({},{show:false})       
     }
     return state;
-
 }
 export default err;

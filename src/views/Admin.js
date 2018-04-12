@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import Pages from './Pages'
-import { getAdmin,saveAdmin,getAdminInfo } from '../actions'
+import { getAdmin, saveAdmin, getAdminInfo } from '../actions'
 import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardHeader, CardBody, Form, FormGroup, InputGroup, InputGroupAddon, Input } from 'reactstrap';
 import AdminForm from './forms/AdminForm'
 import SubmitValidationForm from './forms/SubmitValidationForm'
+import TopModal from '../components/TopModal'
 class Admin extends Component {
   componentWillMount() {
     this.props.dispatch(getAdmin())
@@ -21,19 +22,19 @@ class Admin extends Component {
       showEditUser: !this.state.showEditUser,
     });
   }
- /*  bindData(x) {
-    this.setState({
-      loginName: x.loginName,
-      realName: x.realName,
-      showEditUser: !this.state.showEditUser
-    });
-   
-  } */
+  /*  bindData(x) {
+     this.setState({
+       loginName: x.loginName,
+       realName: x.realName,
+       showEditUser: !this.state.showEditUser
+     });
+    
+   } */
   submit = (values) => {
     // Do something with the form values    
     console.log(values);
     this.props.dispatch(saveAdmin(JSON.stringify(values)))
-    this.setState({showEditUser:false})
+    this.setState({ showEditUser: false })
   }
   render() {
     let admins = this.props.admin
@@ -63,50 +64,25 @@ class Admin extends Component {
                           <td>{x.loginName}</td>
                           <td>{x.realName}</td>
                           <td>{x.regDate}</td>
-                          <td><Button color="danger" size="sm">删除</Button> <Button color="primary"  size="sm" onClick={() =>{this.props.dispatch(getAdminInfo(x));this.setState({showEditUser:true})}}>修改</Button>
-                            <Modal isOpen={this.state.showEditUser} toggle={() => this.toggleShowEditUser()}
-                              className={'modal-primary ' + this.props.className}>
-                              <ModalHeader toggle={() => this.toggleShowEditUser()}>修改用户</ModalHeader>
-                              <ModalBody>
-                                {/* <Form action="" method="post" onSubmit={(e) => this.handleSubmit(e)}>
-                                  <FormGroup>
-                                    <InputGroup>
-                                      <InputGroupAddon >登录名称</InputGroupAddon>
-                                      <Input type="text" id="loginName" name="loginName" value={this.state.loginName} />
-                                      <InputGroupAddon><i className="fa fa-user"></i></InputGroupAddon>
-                                    </InputGroup>
-                                  </FormGroup>
-                                  <FormGroup>
-                                    <InputGroup>
-                                      <InputGroupAddon >真实姓名</InputGroupAddon>
-                                      <Input type="text" id="realName" name="realName" value={this.state.realName} />
-                                      <InputGroupAddon><i className="fa fa-user"></i></InputGroupAddon>
-                                    </InputGroup>
-                                  </FormGroup>
-
-                                  <FormGroup className="form-actions">
-                                    <Button type="submit" color="primary">保存</Button>&nbsp;&nbsp;
-                    <Button onClick={() => this.toggleShowEditUser()} color="secondary">取消</Button>
-                                  </FormGroup>
-                                </Form> */}
-                                <AdminForm onSubmit={this.submit}/>
-                              </ModalBody>
-                              {/*   <ModalFooter>
+                          <td><Button color="danger" size="sm">删除</Button> <Button color="primary" size="sm" onClick={() => { this.props.dispatch(getAdminInfo(x)); this.setState({ showEditUser: true }) }}>修改</Button>
+                          </td>
+                        </tr>
+                      )
+                    })}
+                    
+                  </tbody>
+                </table>
+                <TopModal isOpen={this.state.showEditUser} toggle={() => this.toggleShowEditUser()}
+                      className={'modal-primary ' + this.props.className} onBackdropClick={(e) => { e.preventDefault(); return false }}>
+                      <ModalHeader toggle={() => this.toggleShowEditUser()}>修改用户</ModalHeader>
+                      <ModalBody>
+                        <AdminForm onSubmit={this.submit} />
+                      </ModalBody>
+                      {/*   <ModalFooter>
                                 <Button color="primary" onClick={this.toggleShowEditUser}>Do Something</Button>{' '}
                                 <Button color="secondary" onClick={this.toggleShowEditUser}>Cancel</Button>
                               </ModalFooter> */}
-                            </Modal></td>
-                        </tr>
-                      )
-
-                    })}
-
-
-                  </tbody>
-                </table>
-
-                //////////////////////////////
-               {/*  <AdminForm onSubmit={this.submit}/> */}
+                    </TopModal>
               </div>
             </div>
           </div>
