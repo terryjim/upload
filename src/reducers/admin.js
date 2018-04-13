@@ -1,17 +1,15 @@
-//短信历史记录列表
+//管理员列表
 let sample = [
     {'id':'',
     'loginName':'',
     'realName':'',
     'regDate':''}
 ]
-const admin = (state = sample, action) => {
+const admin = (state = [], action) => {
     if (action.type === 'ADMIN_LIST') {
         console.log(action.list);
         if (action.list != null)
-            state = Object.assign([],action.list)
-        else
-            state = []
+            state = Object.assign([],action.list)      
     }
     return state;
 

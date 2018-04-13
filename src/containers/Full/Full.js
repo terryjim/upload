@@ -23,7 +23,7 @@ import { connect } from 'react-redux'
 import SendSms from '../../views/SendSms'
 import SmsSent from '../../views/SmsSent'
 import Admin from '../../views/Admin'
-
+import SuccessModal from '../../components/SuccessModal'
 import ErrModal from '../../components/ErrModal'
 class Full extends Component {
  /*  componentWillMount() {
@@ -41,7 +41,7 @@ class Full extends Component {
       <div className="app">
         <Header />
         <div className="app-body">
-        <ErrModal/>
+        <ErrModal/><SuccessModal/>
           <Sidebar {...this.props} />
           <main className="main">
             <Breadcrumb />

@@ -1,4 +1,4 @@
-//短信历史记录列表
+//管理员表单
 let sample = 
     {'id':'',
     'loginName':'',

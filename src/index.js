@@ -16,6 +16,7 @@ import Register from './views/Pages/Register/'
 import Page404 from './views/Pages/Page404/'
 import Page500 from './views/Pages/Page500/'
 import ChgPwd from './views/Pages/ChgPwd/'
+import 'react-table/react-table.css'
 const history = createBrowserHistory();
 const store = createStore(reducers, undefined,
     compose(

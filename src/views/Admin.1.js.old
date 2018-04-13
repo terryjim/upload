@@ -6,7 +6,6 @@ import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, Card, Car
 import AdminForm from './forms/AdminForm'
 import SubmitValidationForm from './forms/SubmitValidationForm'
 import TopModal from '../components/TopModal'
-import ReactTable from 'react-table'
 class Admin extends Component {
   componentWillMount() {
     this.props.dispatch(getAdmin())
@@ -41,22 +40,6 @@ class Admin extends Component {
     let admins = this.props.admin
     return (
       <div className="animated fadeIn">
-        <ReactTable data={admins} columns={[{
-          Header: "登录名",
-          accessor: "loginName"
-        }, {
-          Header: "用户名",
-          accessor: "realName"
-        }, {
-          Header: "注册时间",
-          accessor: "regDate"
-        }, {
-          Header: "操作",
-          accessor: "loginName",
-          Cell: row => admins
-        },]} defaultPageSize={10}
-          className="-striped -highlight" />
-
         <div className="row">
 
           <div className="col-lg-12">
@@ -75,7 +58,7 @@ class Admin extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                    {admins == null || admins.length < 1 ? '' : admins.map(x => {
+                    {admins == null||admins.length<1 ? '' : admins.map(x => {                      
                       return (
                         <tr key={x.id}>
                           <td>{x.loginName}</td>
