@@ -6,40 +6,7 @@ import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, Card, Car
 import AdminForm from './forms/AdminForm'
 import SubmitValidationForm from './forms/SubmitValidationForm'
 import TopModal from '../components/TopModal'
-import BootstrapTable from 'react-bootstrap-table-next';
-import paginationFactory from 'react-bootstrap-table2-paginator';
-/* let columns = [{
-  dataField: 'id',
-  text: 'id',
- // hidden: true
- formatter:operator
-}, {
-  dataField: 'loginName',
-  text: '登录名'
-}, {
-  dataField: 'realName',
-  text: '用户名'
-}, {
-  dataField: 'regDate',
-  text: '注册时间'
-}, {
-  dataField: 'id',
-  text: '操作',
-  formatter:(cell,row)=>(<div>{cell}+111</div>)
-}];
-let operator = (cell, row) => {
-  alert(1);
-  return (<div>{cell}+111</div>)
-  }
-  const rowEvents = {
-    onClick: (e, row, rowIndex) => {
-      alert(JSON.stringify(row));
-    }
-  }; */
-  let operator = (cell, row) => {   
-    return (<div>{cell+'hello!'}</div>)
-    }
- 
+import ReactTable from 'react-table'
 class Admin extends Component {
   componentWillMount() {
     this.props.dispatch(getAdmin())
@@ -49,11 +16,8 @@ class Admin extends Component {
     this.state = {
       showEditUser: false,
     };
-
-
     // this.toggleShowEditUser = this.toggleShowEditUser.bind(this);
   }
-
   toggleShowEditUser() {
     this.setState({
       showEditUser: !this.state.showEditUser,
@@ -73,55 +37,25 @@ class Admin extends Component {
     this.props.dispatch(saveAdmin(JSON.stringify(values)))
     this.setState({ showEditUser: false })
   }
-  modify = (cell, row) => {   
-    return (<div><Button color="primary" size="sm" onClick={(e) => { e.stopPropagation(); this.props.dispatch(getAdminInfo(row)); this.setState({ showEditUser: true }) }}>修改</Button></div>)
-    }
-  columns = [{
-    dataField: 'id',
-    text: 'id',
-    hidden: true    
-  }, {
-    dataField: 'loginName',
-    text: '登录名'
-  }, {
-    dataField: 'realName',
-    text: '用户名',
-    //formatter:this.modify
-  }, {
-    dataField: 'regDate',
-    text: '注册时间',
-   /*  events: {
-      onClick: (cell, row) => alert(cell)
-    } */
-  }, {
-    dataField: '',
-    text: '操作',
-    formatter:this.modify
-    //formatter: (cell, row) => (<div><Button color="primary" size="sm" onClick={(e) => { e.stopPropagation(); this.props.dispatch(getAdminInfo(row)); this.setState({ showEditUser: true }) }}>修改</Button></div>)
-  }];
-  options = {
-    onSizePerPageChange: (sizePerPage, page) => {
-      console.log('Size per page change!!!');
-      console.log('Newest size per page:' + sizePerPage);
-      console.log('Newest page:' + page);
-    },
-    onPageChange: (page, sizePerPage) => {
-      console.log('Page change!!!');
-      console.log('Newest size per page:' + sizePerPage);
-      console.log('Newest page:' + page);
-    }
-  };
-  rowEvents = {
-    onClick: (e, row, rowIndex) => {
-      alert(JSON.stringify(row));
-    }
-  };
   render() {
     let admins = this.props.admin
     return (
       <div className="animated fadeIn">
-        <BootstrapTable keyField='id' data={admins} columns={this.columns} striped
-          hover condensed insertRow rowEvents={this.rowEvents} />
+        <ReactTable data={admins} columns={[{
+          Header: "登录名",
+          accessor: "loginName"
+        }, {
+          Header: "用户名",
+          accessor: "realName"
+        }, {
+          Header: "注册时间",
+          accessor: "regDate"
+        }, {
+          Header: "操作",
+          accessor: "loginName",
+          Cell: row => admins
+        },]} defaultPageSize={10}
+          className="-striped -highlight" />
 
         <div className="row">
 
@@ -180,8 +114,6 @@ class Admin extends Component {
 }
 const mapStateToProps = (state) => {
   let admin = state.admin
-  console.log('###########################33')
-  console.log(admin)
   return { admin }
 }
 

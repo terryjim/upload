@@ -58,6 +58,7 @@ export const saveAdmin = (values) => dispatch => {
         dispatch(showError(json.msg))
       else
         dispatch(showSuccess('保存成功！'))
+        dispatch(addAdminToGrid(values))
       /*  console.log(json) */
       /*   let ret = json
         if (ret != null) {
@@ -71,6 +72,11 @@ export const saveAdmin = (values) => dispatch => {
     }
     )
 }
+export const addAdminToGrid=values=>(
+  {
+    type: 'ADD_ADMIN_TO_GRID',
+    data: values
+  })
 
 
 /* export const fetchPages = () => dispatch => {

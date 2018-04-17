@@ -11,6 +11,15 @@ const admin = (state = [], action) => {
         if (action.list != null)
             state = Object.assign([],action.list)      
     }
+    if (action.type === 'ADD_ADMIN_TO_GRID') {
+        console.log(action.data);
+        if (action.data != null){
+            state.unshift(action.data)
+            console.log('-------------------------------------------------')
+            console.log(state)
+        }    
+    }
+
     return state;
 
 }
