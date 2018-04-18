@@ -36,10 +36,10 @@ let operator = (cell, row) => {
       alert(JSON.stringify(row));
     }
   }; */
-  let operator = (cell, row) => {   
-    return (<div>{cell+'hello!'}</div>)
-    }
- 
+let operator = (cell, row) => {
+  return (<div>{cell + 'hello!'}</div>)
+}
+
 class Admin extends Component {
   componentWillMount() {
     this.props.dispatch(getAdmin())
@@ -68,18 +68,17 @@ class Admin extends Component {
     
    } */
   submit = (values) => {
-    // Do something with the form values    
-    console.log(values);
-    this.props.dispatch(saveAdmin(JSON.stringify(values)))
+    // Do something with the form values        
+    this.props.dispatch(saveAdmin(values))
     this.setState({ showEditUser: false })
   }
-  modify = (cell, row) => {   
+  modify = (cell, row) => {
     return (<div><Button color="primary" size="sm" onClick={(e) => { e.stopPropagation(); this.props.dispatch(getAdminInfo(row)); this.setState({ showEditUser: true }) }}>修改</Button></div>)
-    }
+  }
   columns = [{
     dataField: 'id',
     text: 'id',
-    hidden: true    
+    hidden: true
   }, {
     dataField: 'loginName',
     text: '登录名'
@@ -90,13 +89,13 @@ class Admin extends Component {
   }, {
     dataField: 'regDate',
     text: '注册时间',
-   /*  events: {
-      onClick: (cell, row) => alert(cell)
-    } */
+    /*  events: {
+       onClick: (cell, row) => alert(cell)
+     } */
   }, {
     dataField: '',
     text: '操作',
-    formatter:this.modify
+    formatter: this.modify
     //formatter: (cell, row) => (<div><Button color="primary" size="sm" onClick={(e) => { e.stopPropagation(); this.props.dispatch(getAdminInfo(row)); this.setState({ showEditUser: true }) }}>修改</Button></div>)
   }];
   options = {
@@ -116,12 +115,34 @@ class Admin extends Component {
       alert(JSON.stringify(row));
     }
   };
+  rowStyle = (row, rowIndex) => {
+    //修改或添加后的记录着色标注
+    const style = {};
+    /* if (row.id > 10) {
+      style.backgroundColor = '#c8e6c9';
+    } else {
+      style.backgroundColor = '#00BFFF';
+    }  */
+    //alert(this.props.modifiedIds)
+    if (this.props.admin.modifiedIds!=undefined)
+    
+    if ((this.props.admin.modifiedIds!=undefined) && this.props.admin.modifiedIds.indexOf(row.id) > -1){
+      alert(this.props.admin.modifiedIds.indexOf(row.id))
+      style.backgroundColor = '#c8e6c9';
+    }
+    /*   if (rowIndex > 2) {
+        style.fontWeight = 'bold';
+        style.color = 'white';
+      } */
+    return style;
+  };
   render() {
     let admins = this.props.admin
     return (
       <div className="animated fadeIn">
+        <Button color="primary" size="sm" onClick={() => { this.props.dispatch(getAdminInfo(null)); this.setState({ showEditUser: true }) }}>新增</Button>
         <BootstrapTable keyField='id' data={admins} columns={this.columns} striped
-          hover condensed insertRow rowEvents={this.rowEvents} />
+          hover condensed insertRow rowEvents={this.rowEvents} rowStyle={this.rowStyle} />
 
         <div className="row">
 
@@ -141,7 +162,7 @@ class Admin extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                    {admins == null || admins.length < 1 ? '' : admins.map(x => {
+                    {admins.list == null || admins.list.length < 1 ? '' : admins.list.map(x => {
                       return (
                         <tr key={x.id}>
                           <td>{x.loginName}</td>
@@ -178,11 +199,14 @@ class Admin extends Component {
     )
   }
 }
+//获取admin记录集及修改记录ＩＤ数组
 const mapStateToProps = (state) => {
   let admin = state.admin
-  console.log('###########################33')
+  let modifiedIds = state.modifiedIds
+  console.log('###########')
   console.log(admin)
-  return { admin }
+  console.log(modifiedIds)
+  return { admin, modifiedIds }
 }
 
 

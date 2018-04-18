@@ -1,4 +1,4 @@
-import { showError,showSuccess } from "./common";
+import { showError, showSuccess, addModifyRecords } from "./common";
 
 //获取管理员列表
 export const getAdmin = () => dispatch => {
@@ -45,10 +45,9 @@ export const saveAdmin = (values) => dispatch => {
   //不能用headers=new Headers()，否则跨域出错
   /*let headers = { 'Content-Type': 'application/x-www-form-urlencoded' };*/
   let headers = { 'Content-Type': 'application/json' };
-
   //headers.Authorization = WebIM.config.tokenLocal
-  //let body = JSON.stringify(values) 
- let body = values
+  let body = JSON.stringify(values)
+  //let body = values
   let args = { method: 'POST', mode: 'cors', headers: headers, body, cache: 'reload' }
 
   // return dispatch(logined('qwerfasdfasdfasdfasdfasfd'))
@@ -56,10 +55,14 @@ export const saveAdmin = (values) => dispatch => {
     .then(json => {
       if (json.code !== 0)
         dispatch(showError(json.msg))
-      else
+      else {
         dispatch(showSuccess('保存成功！'))
-        dispatch(addAdminToGrid(values))
-      /*  console.log(json) */
+        //回传添加或修改后的记录    
+        dispatch(addAdminToGrid(json.data))
+        //回传添加或修改后的记录id,用于页面标识修改痕迹
+        //alert(json.data.id)
+        dispatch(addModifyRecords([json.data.id]))
+      }      /*  console.log(json) */
       /*   let ret = json
         if (ret != null) {
           ret.map(x => x.created = new Date(parseInt(x.created)).Format('yyyy-MM-dd hh:mm:ss'))
@@ -72,11 +75,13 @@ export const saveAdmin = (values) => dispatch => {
     }
     )
 }
-export const addAdminToGrid=values=>(
-  {
+export const addAdminToGrid = (values) => {
+  //alert(values)
+  return {
     type: 'ADD_ADMIN_TO_GRID',
     data: values
-  })
+  }
+}
 
 
 /* export const fetchPages = () => dispatch => {
