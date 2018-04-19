@@ -17,7 +17,10 @@ export const closeSuccess = () => ({
   type: 'CLOSE_SUCCESS'
 })
 //修改或添加记录的ＩＤ列表，用于标识文档修改状态
-export const addModifyRecords = (data) => ({
-  type: 'ADD_MODIFY_RECORDS',
+export const addEditedIds = (data) => ({
+  type: 'ADD_EDITED_IDS',
   ids:data
+})
+export const clearEditedIds= () => ({
+  type: 'CLEAR_EDITED_IDS'
 })

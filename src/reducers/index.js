@@ -5,12 +5,12 @@ import sms from './sms'
 import pages from './pages'
 import stat from './stat'
 import chgPwdSuccess from './chgPwdSuccess'
-import admin from './admin'
+import admins from './admins'
 import adminForm from './adminForm'
-import modifiedIds from './modifiedIds'
+import editedIds from './editedIds'
 import err from './err'
 import success from './success'
 import { reducer as formReducer } from 'redux-form'
 // export default combineReducers({user,form:formReducer,sms})
-export default combineReducers({ modifiedIds, user, sms, pages, stat, chgPwdSuccess, admin, form: formReducer, adminForm, err, success })
+export default combineReducers({ editedIds, user, sms, pages, stat, chgPwdSuccess, admins, form: formReducer, adminForm, err, success })
 

@@ -1,4 +1,4 @@
-import { showError, showSuccess, addModifyRecords } from "./common";
+import { showError, showSuccess, addEditedIds } from "./common";
 
 //获取管理员列表
 export const getAdmin = () => dispatch => {
@@ -20,18 +20,18 @@ export const getAdmin = () => dispatch => {
       else
         return dispatch(getAdminResult(json.data))
     }).catch(e => {
-      return dispatch(showError('网络异常，请稍后再试！<br/>' + e))
+      return dispatch(showError('系统异常，请稍后再试！<br/>' + e))
     }
     )
 }
-//根据指定条件获取sms记录
+//获取管理员列表回调
 export const getAdminResult = (json) => (
   {
     type: 'ADMIN_LIST',
-    list: json
+    data: json
   }
 )
-//根据指定条件获取sms记录
+//获取管理员详细信息回调
 export const getAdminInfo = (json) => (
   {
     type: 'GET_ADMIN_INFO',
@@ -61,7 +61,7 @@ export const saveAdmin = (values) => dispatch => {
         dispatch(addAdminToGrid(json.data))
         //回传添加或修改后的记录id,用于页面标识修改痕迹
         //alert(json.data.id)
-        dispatch(addModifyRecords([json.data.id]))
+        dispatch(addEditedIds([json.data.id]))
       }      /*  console.log(json) */
       /*   let ret = json
         if (ret != null) {

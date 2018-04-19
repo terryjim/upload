@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import Pages from './Pages'
 import { getAdmin, saveAdmin, getAdminInfo } from '../actions/admin'
+import { clearEditedIds } from '../actions/common'
 import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardHeader, CardBody, Form, FormGroup, InputGroup, InputGroupAddon, Input } from 'reactstrap';
 import AdminForm from './forms/AdminForm'
 import SubmitValidationForm from './forms/SubmitValidationForm'
 import TopModal from '../components/TopModal'
 import BootstrapTable from 'react-bootstrap-table-next';
-import paginationFactory from 'react-bootstrap-table2-paginator';
+/* import paginationFactory from 'react-bootstrap-table2-paginator';
+import paginator from 'react-bootstrap-table2-paginator'; */
 /* let columns = [{
   dataField: 'id',
   text: 'id',
@@ -36,27 +38,35 @@ let operator = (cell, row) => {
       alert(JSON.stringify(row));
     }
   }; */
-let operator = (cell, row) => {
-  return (<div>{cell + 'hello!'}</div>)
-}
 
+const selectRow = {
+  mode: 'checkbox',
+  clickToSelect: true
+};
 class Admin extends Component {
   componentWillMount() {
+    this.props.dispatch(clearEditedIds())
     this.props.dispatch(getAdmin())
   }
   constructor(props) {
     super(props);
     this.state = {
       showEditUser: false,
+      showDanger:false
     };
 
 
     // this.toggleShowEditUser = this.toggleShowEditUser.bind(this);
   }
 
-  toggleShowEditUser() {
+  toggleShowEditUser=()=> {
     this.setState({
       showEditUser: !this.state.showEditUser,
+    });
+  }
+  toggleShowDanger=()=> {
+    this.setState({
+      showDanger: !this.state.showDanger,
     });
   }
   /*  bindData(x) {
@@ -72,13 +82,40 @@ class Admin extends Component {
     this.props.dispatch(saveAdmin(values))
     this.setState({ showEditUser: false })
   }
-  modify = (cell, row) => {
-    return (<div><Button color="primary" size="sm" onClick={(e) => { e.stopPropagation(); this.props.dispatch(getAdminInfo(row)); this.setState({ showEditUser: true }) }}>修改</Button></div>)
+  operator2 = (cell, row) => {
+    return (<div>      
+      <a className="fa fa-edit fa-lg mt-4" onClick={(e) => {
+          e.stopPropagation(); this.props.dispatch(getAdminInfo(row));
+          this.setState({ showEditUser: true })
+        }}></a> <a className="fa fa-trash-o fa-lg mt-4" onClick={e=>{e.stopPropagation();this.toggleShowDanger()}}></a>
+      <Button color="primary" size="sm"
+        onClick={(e) => {
+          e.stopPropagation(); this.props.dispatch(getAdminInfo(row));
+          this.setState({ showEditUser: true })
+        }}>修改</Button>　
+        <Button color="danger"  size="sm"
+        onClick={e=>{e.stopPropagation();this.toggleShowDanger()}}>删除</Button>
+        
+        </div>)
+  }
+  operator = (cell, row) => {
+    return (<div>      
+      <a className="fa fa-edit fa-lg mt-4" onClick={(e) => {
+          e.stopPropagation(); this.props.dispatch(getAdminInfo(row));
+          this.setState({ showEditUser: true })
+        }}></a> <a className="fa fa-trash-o fa-lg mt-4" onClick={e=>{e.stopPropagation();this.toggleShowDanger()}}></a>
+       </div>)
   }
   columns = [{
     dataField: 'id',
     text: 'id',
     hidden: true
+  }, {
+    dataField: '',
+    text: '',
+    formatter: this.operator,
+    style: {'width':'100px',backgroundColor: 'green' }
+    //formatter: (cell, row) => (<div><Button color="primary" size="sm" onClick={(e) => { e.stopPropagation(); this.props.dispatch(getAdminInfo(row)); this.setState({ showEditUser: true }) }}>修改</Button></div>)
   }, {
     dataField: 'loginName',
     text: '登录名'
@@ -95,21 +132,10 @@ class Admin extends Component {
   }, {
     dataField: '',
     text: '操作',
-    formatter: this.modify
+    formatter: this.operator2
     //formatter: (cell, row) => (<div><Button color="primary" size="sm" onClick={(e) => { e.stopPropagation(); this.props.dispatch(getAdminInfo(row)); this.setState({ showEditUser: true }) }}>修改</Button></div>)
   }];
-  options = {
-    onSizePerPageChange: (sizePerPage, page) => {
-      console.log('Size per page change!!!');
-      console.log('Newest size per page:' + sizePerPage);
-      console.log('Newest page:' + page);
-    },
-    onPageChange: (page, sizePerPage) => {
-      console.log('Page change!!!');
-      console.log('Newest size per page:' + sizePerPage);
-      console.log('Newest page:' + page);
-    }
-  };
+
   rowEvents = {
     onClick: (e, row, rowIndex) => {
       alert(JSON.stringify(row));
@@ -123,12 +149,11 @@ class Admin extends Component {
     } else {
       style.backgroundColor = '#00BFFF';
     }  */
-    //alert(this.props.modifiedIds)
-    if (this.props.admin.modifiedIds!=undefined)
-    
-    if ((this.props.admin.modifiedIds!=undefined) && this.props.admin.modifiedIds.indexOf(row.id) > -1){
-      alert(this.props.admin.modifiedIds.indexOf(row.id))
+    //alert(this.props.editedIds)
+
+    if ((this.props.editedIds != undefined) && this.props.editedIds.indexOf(row.id) > -1) {
       style.backgroundColor = '#c8e6c9';
+
     }
     /*   if (rowIndex > 2) {
         style.fontWeight = 'bold';
@@ -137,12 +162,12 @@ class Admin extends Component {
     return style;
   };
   render() {
-    let admins = this.props.admin
+    let admins = this.props.admins
     return (
       <div className="animated fadeIn">
         <Button color="primary" size="sm" onClick={() => { this.props.dispatch(getAdminInfo(null)); this.setState({ showEditUser: true }) }}>新增</Button>
         <BootstrapTable keyField='id' data={admins} columns={this.columns} striped
-          hover condensed insertRow rowEvents={this.rowEvents} rowStyle={this.rowStyle} />
+          hover condensed insertRow rowStyle={this.rowStyle} selectRow={selectRow} />
 
         <div className="row">
 
@@ -187,6 +212,17 @@ class Admin extends Component {
                                 <Button color="secondary" onClick={this.toggleShowEditUser}>Cancel</Button>
                               </ModalFooter> */}
                 </TopModal>
+                <TopModal isOpen={this.state.showDanger} toggle={() => this.toggleShowDanger()}
+                  className={'modal-danger ' + this.props.className}>
+                  <ModalHeader toggle={() => this.toggleShowDanger()}>删除记录</ModalHeader>
+                  <ModalBody>
+                    您是否确定要删除选中的记录？
+                  </ModalBody>
+                  <ModalFooter>
+                    <Button color="danger" onClick={this.toggleShowDanger}>确定</Button>{' '}
+                    <Button color="secondary" onClick={this.toggleShowDanger}>取消</Button>
+                  </ModalFooter>
+                </TopModal>
               </div>
             </div>
           </div>
@@ -201,12 +237,9 @@ class Admin extends Component {
 }
 //获取admin记录集及修改记录ＩＤ数组
 const mapStateToProps = (state) => {
-  let admin = state.admin
-  let modifiedIds = state.modifiedIds
-  console.log('###########')
-  console.log(admin)
-  console.log(modifiedIds)
-  return { admin, modifiedIds }
+  let admins = state.admins
+  let editedIds = state.editedIds
+  return { admins, editedIds }
 }
 
 
