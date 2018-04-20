@@ -5,9 +5,9 @@ import { getAdmin, saveAdmin, getAdminInfo } from '../actions/admin'
 import { clearEditedIds } from '../actions/common'
 import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardHeader, CardBody, Form, FormGroup, InputGroup, InputGroupAddon, Input } from 'reactstrap';
 import AdminForm from './forms/AdminForm'
+import SubmitValidationForm from './forms/SubmitValidationForm'
 import TopModal from '../components/TopModal'
-//import BootstrapTable from 'react-bootstrap-table-next';
-import ReactTable from "react-table";
+import BootstrapTable from 'react-bootstrap-table-next';
 /* import paginationFactory from 'react-bootstrap-table2-paginator';
 import paginator from 'react-bootstrap-table2-paginator'; */
 /* let columns = [{
@@ -82,7 +82,7 @@ class Admin extends Component {
     this.props.dispatch(saveAdmin(values))
     this.setState({ showEditUser: false })
   }
-  /* operator2 = (cell, row) => {
+  operator2 = (cell, row) => {
     return (<div>      
       <a className="fa fa-edit fa-lg mt-4" onClick={(e) => {
           e.stopPropagation(); this.props.dispatch(getAdminInfo(row));
@@ -105,78 +105,43 @@ class Admin extends Component {
           this.setState({ showEditUser: true })
         }}></a> <a className="fa fa-trash-o fa-lg mt-4" onClick={e=>{e.stopPropagation();this.toggleShowDanger()}}></a>
        </div>)
-  } */
+  }
   columns = [{
-    accessor: 'id',
-    Header: 'id',
-    //hidden: true
-    Cell: row => (
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          backgroundColor: "#dadada",
-          borderRadius: "2px"
-        }}
-      >
-        <div
-          style={{
-            width: `${row.value}%`,
-            height: "100%",
-            backgroundColor:
-              row.value > 10
-                ? "#85cc00"
-                : row.value > 50
-                  ? "#ffbf00"
-                  : "#ff2e00",
-            borderRadius: "2px",
-            transition: "all .2s ease-out"
-          }}
-        />
-      </div>
-    )
+    dataField: 'id',
+    text: 'id',
+    hidden: true
   }, {
-   
-    Header: '',
-    //formatter: this.operator,
-    //style: {'width':'100px',backgroundColor: 'green' }
+    dataField: '',
+    text: '',
+    formatter: this.operator,
+    style: {'width':'100px',backgroundColor: 'green' }
     //formatter: (cell, row) => (<div><Button color="primary" size="sm" onClick={(e) => { e.stopPropagation(); this.props.dispatch(getAdminInfo(row)); this.setState({ showEditUser: true }) }}>修改</Button></div>)
   }, {
-    accessor: 'loginName',
-    Header: '登录名'
+    dataField: 'loginName',
+    text: '登录名'
   }, {
-    accessor: 'realName',
-    Header: '用户名',
+    dataField: 'realName',
+    text: '用户名',
     //formatter:this.modify
   }, {
-    accessor: 'regDate',
-    Header: '注册时间',
+    dataField: 'regDate',
+    text: '注册时间',
     /*  events: {
        onClick: (cell, row) => alert(cell)
      } */
-  }, { 
-    
-    Header: '操作',
-    sortable: false,
-    Cell: (c) => (<div><Button color="primary" size="sm" onClick={(e) => {e.stopPropagation(); this.props.dispatch(getAdminInfo(c.row)); this.setState({ showEditUser: true }) }}>修改</Button></div>)
-  }/* ,
-  {
-    getProps: (state, rowInfo, column) => {
-      return {
-        style: {
-          background: rowInfo.row.name === "Santa Clause" ? "red" : null
-        }
-      };
-    }
-  } */
-];
+  }, {
+    dataField: '',
+    text: '操作',
+    formatter: this.operator2
+    //formatter: (cell, row) => (<div><Button color="primary" size="sm" onClick={(e) => { e.stopPropagation(); this.props.dispatch(getAdminInfo(row)); this.setState({ showEditUser: true }) }}>修改</Button></div>)
+  }];
 
   rowEvents = {
     onClick: (e, row, rowIndex) => {
       alert(JSON.stringify(row));
     }
   };
-  rowStyle = (rowInfo) => {
+  rowStyle = (row, rowIndex) => {
     //修改或添加后的记录着色标注
     const style = {};
     /* if (row.id > 10) {
@@ -186,10 +151,10 @@ class Admin extends Component {
     }  */
     //alert(this.props.editedIds)
 
-    /* if ((this.props.editedIds != undefined) && this.props.editedIds.indexOf(rowInfo.row.id) > -1) {
+    if ((this.props.editedIds != undefined) && this.props.editedIds.indexOf(row.id) > -1) {
       style.backgroundColor = '#c8e6c9';
 
-    } */
+    }
     /*   if (rowIndex > 2) {
         style.fontWeight = 'bold';
         style.color = 'white';
@@ -198,34 +163,12 @@ class Admin extends Component {
   };
   render() {
     let admins = this.props.admins
-  
-   
     return (
       <div className="animated fadeIn">
         <Button color="primary" size="sm" onClick={() => { this.props.dispatch(getAdminInfo(null)); this.setState({ showEditUser: true }) }}>新增</Button>
-        <ReactTable keyField='id' data={admins} columns={this.columns} defaultPageSize={10}
-          className="-striped -highlight" getTrProps={(state, rowInfo, column, instance) => {
-            let style={}
-            if ((this.props.editedIds != undefined) && rowInfo!= undefined && this.props.editedIds.indexOf(rowInfo.row.id) > -1) {
-              style.background = '#c8e6c9';        
-            } 
-            return {style}
-              //onClick: (e, handleOriginal) => {
-              /*   console.log("A Td Element was clicked!");
-                console.log("it produced this event:", e);
-                console.log("It was in this column:", column);
-                console.log("It was in this row:", rowInfo);
-                console.log("It was in this table instance:", instance); */
-         
-                // IMPORTANT! React-Table uses onClick internally to trigger
-                // events like expanding SubComponents and pivots.
-                // By default a custom 'onClick' handler will override this functionality.
-                // If you want to fire the original onClick handler, call the
-                // 'handleOriginal' function.
-               
-             // }
-          
-          }}/>
+        <BootstrapTable keyField='id' data={admins} columns={this.columns} striped
+          hover condensed insertRow rowStyle={this.rowStyle} selectRow={selectRow} />
+
         <div className="row">
 
           <div className="col-lg-12">
@@ -234,7 +177,30 @@ class Admin extends Component {
                 <i className="fa fa-align-justify"></i> 管理员设置
               </div>
               <div className="card-block">
-                
+                <table className="table table-bordered table-striped" >
+                  <thead>
+                    <tr>
+                      <th>登录名</th>
+                      <th>用户名</th>
+                      <th>注册时间</th>
+                      <th>操作{this.state.realName}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {admins.list == null || admins.list.length < 1 ? '' : admins.list.map(x => {
+                      return (
+                        <tr key={x.id}>
+                          <td>{x.loginName}</td>
+                          <td>{x.realName}</td>
+                          <td>{x.regDate}</td>
+                          <td><Button color="danger" size="sm">删除</Button> <Button color="primary" size="sm" onClick={() => { this.props.dispatch(getAdminInfo(x)); this.setState({ showEditUser: true }) }}>修改</Button>
+                          </td>
+                        </tr>
+                      )
+                    })}
+
+                  </tbody>
+                </table>
                 <TopModal isOpen={this.state.showEditUser} toggle={() => this.toggleShowEditUser()}
                   className={'modal-primary ' + this.props.className}>
                   <ModalHeader toggle={() => this.toggleShowEditUser()}>修改用户</ModalHeader>
