@@ -8,13 +8,12 @@ export const getAdmin = () => dispatch => {
 
   //headers.Authorization = WebIM.config.tokenLocal
 
-  let args = { method: 'GET', mode: 'cors', headers: headers, cache: 'reload' }
+  let args = { method: 'POST', mode: 'cors', headers: headers, cache: 'reload' }
 
   // return dispatch(logined('qwerfasdfasdfasdfasdfasfd'))
   return fetch(window.defaultParams.getAdminUrl, args).then(response => response.json())
     .then(json => {
-      console.log(json)
-      console.log(json.data)
+     
       if (json.code !== 0)
         return dispatch(showError(json.msg))
       else
@@ -53,8 +52,12 @@ export const saveAdmin = (values) => dispatch => {
   // return dispatch(logined('qwerfasdfasdfasdfasdfasfd'))
   return fetch(window.defaultParams.saveAdminUrl, args).then(response => response.json())
     .then(json => {
-      if (json.code !== 0)
-        dispatch(showError(json.msg))
+      console.log(json)
+      console.log(json.data)
+      if (json.code !== 0){
+        console.log(json.msg)
+        return dispatch(showError(json.msg+ '<br>'+json.data))
+    }
       else {
         dispatch(showSuccess('保存成功！'))
         //回传添加或修改后的记录    

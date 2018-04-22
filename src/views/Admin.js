@@ -109,7 +109,7 @@ class Admin extends Component {
   columns = [{
     accessor: 'id',
     Header: 'id',
-    //hidden: true
+    show:false,
     Cell: row => (
       <div
         style={{
@@ -138,10 +138,16 @@ class Admin extends Component {
   }, {
    
     Header: '',
-    //formatter: this.operator,
-    //style: {'width':'100px',backgroundColor: 'green' }
-    //formatter: (cell, row) => (<div><Button color="primary" size="sm" onClick={(e) => { e.stopPropagation(); this.props.dispatch(getAdminInfo(row)); this.setState({ showEditUser: true }) }}>修改</Button></div>)
-  }, {
+    
+    sortable: false,
+
+     
+
+    Cell: (c) => (<div><a className="fa fa-edit fa-lg mt-4" onClick={(e) => {
+      e.stopPropagation(); this.props.dispatch(getAdminInfo(c.row));
+      this.setState({ showEditUser: true })
+    }}></a> <a className="fa fa-trash-o fa-lg mt-4" onClick={e=>{e.stopPropagation();this.toggleShowDanger()}}></a></div>)
+   }, {
     accessor: 'loginName',
     Header: '登录名'
   }, {
@@ -203,7 +209,7 @@ class Admin extends Component {
     return (
       <div className="animated fadeIn">
         <Button color="primary" size="sm" onClick={() => { this.props.dispatch(getAdminInfo(null)); this.setState({ showEditUser: true }) }}>新增</Button>
-        <ReactTable keyField='id' data={admins} columns={this.columns} defaultPageSize={10}
+        <ReactTable keyField='id' data={admins.content} columns={this.columns} defaultPageSize={10}
           className="-striped -highlight" getTrProps={(state, rowInfo, column, instance) => {
             let style={}
             if ((this.props.editedIds != undefined) && rowInfo!= undefined && this.props.editedIds.indexOf(rowInfo.row.id) > -1) {

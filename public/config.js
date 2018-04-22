@@ -12,9 +12,9 @@ SMS.config = {
     //短信费率，10条1元
     rate: 10
 }
-const defaultUrl = "http://192.168.3.37/"
+const defaultUrl = "http://localhost/"
 const defaultParams = {
-    getAdminUrl: defaultUrl + 'admin/getAll'     ,
+    getAdminUrl: defaultUrl + 'admin/getByPage'     ,
     saveAdminUrl:defaultUrl + 'admin/save',
 
 }
