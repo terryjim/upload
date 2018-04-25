@@ -15,7 +15,7 @@ export const getAdmin = () => dispatch => {
     .then(json => {
      
       if (json.code !== 0)
-        return dispatch(showError(json.msg))
+        return dispatch(showError(json.msg+ '<br>'+json.data))
       else
         return dispatch(getAdminResult(json.data))
     }).catch(e => {

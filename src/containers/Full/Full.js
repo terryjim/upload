@@ -25,6 +25,7 @@ import SmsSent from '../../views/SmsSent'
 import Admin from '../../views/Admin'
 import SuccessModal from '../../components/SuccessModal'
 import ErrModal from '../../components/ErrModal'
+import ConfirmModal from '../../components/ConfirmModal'
 class Full extends Component {
  /*  componentWillMount() {
     if (this.props.token == null || this.props.token == '') {
@@ -41,7 +42,7 @@ class Full extends Component {
       <div className="app">
         <Header />
         <div className="app-body">
-        <ErrModal/><SuccessModal/>
+        <ErrModal/><SuccessModal/><ConfirmModal/>
           <Sidebar {...this.props} />
           <main className="main">
             <Breadcrumb />

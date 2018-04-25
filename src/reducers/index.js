@@ -10,7 +10,8 @@ import adminForm from './adminForm'
 import editedIds from './editedIds'
 import err from './err'
 import success from './success'
+import confirm from './confirm'
 import { reducer as formReducer } from 'redux-form'
 // export default combineReducers({user,form:formReducer,sms})
-export default combineReducers({ editedIds, user, sms, pages, stat, chgPwdSuccess, admins, form: formReducer, adminForm, err, success })
+export default combineReducers({confirm,editedIds, user, sms, pages, stat, chgPwdSuccess, admins, form: formReducer, adminForm, err, success })
 

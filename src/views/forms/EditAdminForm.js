@@ -53,7 +53,7 @@ const warn = values => {
         </div>
       )
 
-let AdminForm = props => { 
+let EditAdminForm = props => { 
   const {dispatch,error,handleSubmit, pristine, reset, submitting } = props;
   return (
     <form onSubmit={handleSubmit} >
@@ -139,15 +139,15 @@ let AdminForm = props => {
 
 
 // Decorate the form component
-AdminForm = reduxForm({
+EditAdminForm = reduxForm({
   form: 'admin', // a unique name for this form
   validate,                // 上面定义的一个验证函数，使redux-form同步验证
   warn
-})(AdminForm);
-AdminForm = connect(
+})(EditAdminForm);
+EditAdminForm = connect(
   state => ({
     initialValues: state.adminForm.data // pull initial values from account reducer
   }),
   // { load: loadAccount } // bind account loading action creator
-)(AdminForm)
-export default AdminForm;
+)(EditAdminForm)
+export default EditAdminForm;
