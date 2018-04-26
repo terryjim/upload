@@ -33,13 +33,15 @@ const admins = (state = {}, action) => {
             state = Object.assign({}, action.data)
     }
     if (action.type === 'ADD_ADMIN_TO_GRID') {
+       console.log('####################################')
         if (action.data != null) {
+            console.log(action.data)
             //如果存在相由的id说明是修改记录，则先删除state中原记录           
             let index = state.content.findIndex(v => v.id === action.data.id)
             if (index > -1)
-                state.content.splice(index, 1, action.data.content);
+                state.content.splice(index, 1, action.data);
             else
-                state.content.splice(0, 0, action.data.content);
+                state.content.splice(0, 0, action.data);
             //state.push(action.data)
             state = Object.assign({}, state)
         }

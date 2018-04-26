@@ -27,7 +27,6 @@ let ShowAdminForm = props => {
             name="loginName"
             component="input"
             type="text"
-             st
           />
         </div>
       </div>

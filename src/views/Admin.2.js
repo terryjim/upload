@@ -1,18 +1,28 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import Pages from './Pages'
-import { getAdmin, saveAdmin, getAdminInfo,delAdmins} from '../actions/admin'
-import { showConfirm,closeConfirm} from '../actions/common'
+import { getAdmin, saveAdmin, getAdminInfo } from '../actions/admin'
+import { showConfirm } from '../actions/common'
 import { clearEditedIds } from '../actions/common'
 import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardHeader, CardBody, Form, FormGroup, InputGroup, InputGroupAddon, Input } from 'reactstrap';
 import ShowAdminForm from './forms/ShowAdminForm'
 import EditAdminForm from './forms/EditAdminForm'
 import TopModal from '../components/TopModal'
 import ReactTable from "react-table";
-import checkboxHOC from "react-table/lib/hoc/selectTable";
 
 //管理员主列表，增删改查
-  const CheckboxTable = checkboxHOC(ReactTable);
+/*
+let operator = (cell, row) => {
+  alert(1);
+  return (<div>{cell}+111</div>)
+  }
+  const rowEvents = {
+    onClick: (e, row, rowIndex) => {
+      alert(JSON.stringify(row));
+    }
+  }; */
+
+
 class Admin extends Component {
   componentWillMount() {
     //每次打开时清除页面修改痕迹
@@ -20,72 +30,17 @@ class Admin extends Component {
     //获取分页列表
     this.props.dispatch(getAdmin())
   }
-  componentWillReceiveProps(){
-    alert(11)
-    alert(this.props.confirmDel)
-      //确认删除记录操作
-      if(this.props.confirmDel){     
-        alert(delAdmins(this.state.selection))
-      }
-  }
   constructor(props) {
     super(props);
     this.state = {
       showEditAdmin: false,//显示修改表单
       showDanger: false,   //显示错误信息
       showAdmin: false,
-      selection: [],
-      selectAll: false
-    };  
+    };
+
+
+    // this.toggleShowEditAdmin = this.toggleShowEditAdmin.bind(this);
   }
-  toggleSelection = (key, shift, row) => {
-    /* 
-      Implementation of how to manage the selection state is up to the developer.
-      This implementation uses an array stored in the component state.
-      Other implementations could use object keys, a Javascript Set, or Redux... etc.
-    */
-    // start off with the existing state
-    let selection = [...this.state.selection];
-    const keyIndex = selection.indexOf(key);
-    // check to see if the key exists
-    if (keyIndex >= 0) {
-      // it does exist so we will remove it using destructing
-      selection = [
-        ...selection.slice(0, keyIndex),
-        ...selection.slice(keyIndex + 1)
-      ];
-    } else {
-      // it does not exist so add it
-      selection.push(key);
-    }
-    // update the state
-    this.setState({ selection });
-  };
-
-  toggleAll = () => {
-    const selectAll = this.state.selectAll ? false : true;    
-    const selection = [];
-    if (selectAll) {
-      // we need to get at the internals of ReactTable
-      const wrappedInstance = this.checkboxTable.getWrappedInstance();
-      // the 'sortedData' property contains the currently accessible records based on the filter and sort
-      const currentRecords = wrappedInstance.getResolvedState().sortedData;
-      // we just push all the IDs onto the selection array
-      currentRecords.forEach(item => {       
-        selection.push(item._original.id);
-      });
-    }
-    this.setState({ selectAll, selection });
-  };
-
-  isSelected = key => {
-    /*
-      Instead of passing our external selection state we provide an 'isSelected'
-      callback and detect the selection state ourselves. This allows any implementation
-      for selection (either an array, object keys, or even a Javascript Set object).
-    */
-    return this.state.selection.includes(key);
-  };
   //切换编辑窗口状态（开、闭）
   toggleShowEditAdmin = () => {
     this.setState({
@@ -146,7 +101,7 @@ class Admin extends Component {
       <a className="fa fa-edit fa-lg mt-4"
         onClick={
           (e) => {
-            //e.stopPropagation()
+            e.stopPropagation()
             this.props.dispatch(getAdminInfo(c.row))　　/* 获取当前行信息填充到编辑表单 */
             this.setState({ showEditAdmin: true })
           }
@@ -156,7 +111,7 @@ class Admin extends Component {
         onClick={
           e => {
             e.stopPropagation()
-            this.props.dispatch(showConfirm('是否删除选中记录？','admin'))
+            this.props.dispatch(showConfirm('是否删除选中记录？'))
           }
         }>
       </a>
@@ -174,32 +129,15 @@ class Admin extends Component {
   }
   ];
   render() {
-    const { toggleSelection, toggleAll, isSelected } = this;
-    const {  selectAll } = this.state;
-    const checkboxProps = {
-      selectAll,
-      isSelected,
-      toggleSelection,
-     toggleAll,
-      selectType: "checkbox",
-     /*  getTrProps: (s, r) => {
-        // someone asked for an example of a background color change
-        // here it is...
-        const selected = this.isSelected(r.original._id);
-        return {
-          style: {
-            backgroundColor: selected ? "lightgreen" : "inherit"
-            // color: selected ? 'white' : 'inherit',
-          }
-        };
-      } */
-    };
     let admins = this.props.admins
-  
+    //确认删除记录操作
+    if(this.props.confirmDel){
+alert('删除！！！')
+    }
     return (
       <div className="animated fadeIn">
         <Button color="primary" size="sm" onClick={() => { this.props.dispatch(getAdminInfo(null)); this.setState({ showEditAdmin: true }) }}>新增</Button>
-        <CheckboxTable ref={r => (this.checkboxTable = r)} keyField='id' data={admins.content} columns={this.columns} defaultPageSize={10}
+        <ReactTable keyField='id' data={admins.content} columns={this.columns} defaultPageSize={10}
           className="-striped -highlight"
           getTrProps={
             (state, rowInfo, column, instance) => {
@@ -211,15 +149,11 @@ class Admin extends Component {
                 style, onDoubleClick: (e, handleOriginal) => {
                   this.props.dispatch(getAdminInfo(rowInfo.row));
                   this.setState({ showAdmin: true })
-                },
-                onClick: (e,handleOriginal)=>{
-                  //alert(rowInfo.row.id)
-                  this.setState({ selection: [rowInfo.row.id]})
                 }
               }
             }
           }
-          {...checkboxProps}
+
         />
         <div className="row">
 
@@ -268,7 +202,7 @@ class Admin extends Component {
 const mapStateToProps = (state) => {
   let admins = state.admins
   let editedIds = state.editedIds
-  let confirmDel=state.confirm.module==='admin'?state.confirm.confirm:false 
+  let confirmDel=state.confirm.confirm
   return { admins, editedIds,confirmDel}
 }
 

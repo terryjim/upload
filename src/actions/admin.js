@@ -1,4 +1,4 @@
-import { showError, showSuccess, addEditedIds } from "./common";
+import { showError, showSuccess, addEditedIds,closeConfirm } from "./common";
 
 //获取管理员列表
 export const getAdmin = () => dispatch => {
@@ -78,6 +78,8 @@ export const saveAdmin = (values) => dispatch => {
     }
     )
 }
+
+//新增或修改后的记录更新列表
 export const addAdminToGrid = (values) => {
   //alert(values)
   return {
@@ -85,7 +87,33 @@ export const addAdminToGrid = (values) => {
     data: values
   }
 }
+//新增或修改后的记录更新列表
+export const delAdmins =  (values) => dispatch => {  
+  dispatch(closeConfirm())  
+  let headers = { 'Content-Type': 'application/json' };
+  //headers.Authorization = WebIM.config.tokenLocal
+  //let body = JSON.stringify(values)
+  let body = values
+  console.log(body)
+  let args = { method: 'POST', mode: 'cors', headers: headers, body, cache: 'reload' }
 
+  // return dispatch(logined('qwerfasdfasdfasdfasdfasfd'))
+  return fetch(window.defaultParams.delAdminUrl, args).then(response => response.json())
+    .then(json => {
+      console.log(json)
+      console.log(json.data)
+      if (json.code !== 0){
+        console.log(json.msg)
+        return dispatch(showError(json.msg+ '<br>'+json.data))
+    }
+      else {
+        dispatch(showSuccess(json.data))       
+      }   
+    }).catch(e => {
+      return dispatch(showError('网络异常，请稍后再试！<br/>' + e))
+    }
+    )
+}
 
 /* export const fetchPages = () => dispatch => {
   //不能用headers=new Headers()，否则跨域出错
