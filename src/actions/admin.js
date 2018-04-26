@@ -89,11 +89,13 @@ export const addAdminToGrid = (values) => {
 }
 //新增或修改后的记录更新列表
 export const delAdmins =  (values) => dispatch => {  
+  console.log('$$$$$$$$4')
+  console.log(values)
   dispatch(closeConfirm())  
   let headers = { 'Content-Type': 'application/json' };
   //headers.Authorization = WebIM.config.tokenLocal
-  //let body = JSON.stringify(values)
-  let body = values
+  let body ='dddddddddd'
+  //let body = values
   console.log(body)
   let args = { method: 'POST', mode: 'cors', headers: headers, body, cache: 'reload' }
 

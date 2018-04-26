@@ -20,12 +20,12 @@ class Admin extends Component {
     //获取分页列表
     this.props.dispatch(getAdmin())
   }
-  componentWillReceiveProps(){
-    alert(11)
-    alert(this.props.confirmDel)
+  componentWillReceiveProps(nextProps){    
       //确认删除记录操作
-      if(this.props.confirmDel){     
-        alert(delAdmins(this.state.selection))
+      console.log(nextProps)
+      if(nextProps.confirmDel){     
+        console.log('#####################################################################333')
+        this.props.dispatch(delAdmins(this.state.selection))
       }
   }
   constructor(props) {
@@ -155,7 +155,7 @@ class Admin extends Component {
       <a className="fa fa-trash-o fa-lg mt-4"
         onClick={
           e => {
-            e.stopPropagation()
+           // e.stopPropagation()
             this.props.dispatch(showConfirm('是否删除选中记录？','admin'))
           }
         }>
