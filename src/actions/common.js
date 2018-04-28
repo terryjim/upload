@@ -8,15 +8,17 @@ export const closeError = () => ({
   type: 'CLOSE_ERROR'
 })
 //显示确认窗口
-export const showConfirm = (msg,module) => ({
+export const showConfirm = (msg,module,operate) => ({
   type: 'SHOW_CONFIRM',
   msg,
-  module
+  module,
+  operate
 })
 //选中确认按钮
-export const confirm = (module) => ({
+export const confirm = (module,operate) => ({
   type: 'CONFIRM',
-  module
+  module,
+  operate
 })
 //关闭确认窗口
 export const closeConfirm = () => ({

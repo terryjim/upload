@@ -18,7 +18,7 @@ class Admin extends Component {
     //每次打开时清除页面修改痕迹
     this.props.dispatch(clearEditedIds())
     //获取分页列表
-    this.props.dispatch(getAdmin())
+    this.props.dispatch(getAdmin({page:0,size:10}))
   }
   componentWillReceiveProps(nextProps){    
       //确认删除记录操作
@@ -35,7 +35,7 @@ class Admin extends Component {
       showDanger: false,   //显示错误信息
       showAdmin: false,
       selection: [],
-      selectAll: false
+      selectAll: false,
     };  
   }
   toggleSelection = (key, shift, row) => {
@@ -156,7 +156,7 @@ class Admin extends Component {
         onClick={
           e => {
            // e.stopPropagation()
-            this.props.dispatch(showConfirm('是否删除选中记录？','admin'))
+            this.props.dispatch(showConfirm('是否删除选中记录？','admin','del'))
           }
         }>
       </a>
@@ -173,6 +173,7 @@ class Admin extends Component {
     Header: '注册时间',
   }
   ];
+
   render() {
     const { toggleSelection, toggleAll, isSelected } = this;
     const {  selectAll } = this.state;
@@ -199,23 +200,27 @@ class Admin extends Component {
     return (
       <div className="animated fadeIn">
         <Button color="primary" size="sm" onClick={() => { this.props.dispatch(getAdminInfo(null)); this.setState({ showEditAdmin: true }) }}>新增</Button>
-        <CheckboxTable ref={r => (this.checkboxTable = r)} keyField='id' data={admins.content} columns={this.columns} defaultPageSize={10}
-          className="-striped -highlight"
-          getTrProps={
+        <Button color="danger" size="sm" onClick={() => { this.props.dispatch(showConfirm('是否删除选中记录？','admin','del')); }}>删除</Button>
+         <CheckboxTable ref={r => (this.checkboxTable = r)} keyField='id' data={admins.content} 
+         pages={admins.totalPages} columns={this.columns} defaultPageSize={10} filterable 
+         className="-striped -highlight"  onPageChange={(pageIndex) => this.props.dispatch(getAdmin({page:pageIndex,size:10}))} 
+         manual // Forces table not to paginate or sort automatically, so we can handle it server-side
+              
+         getTrProps={
             (state, rowInfo, column, instance) => {
               let style = {}
               if ((this.props.editedIds != undefined) && rowInfo != undefined && this.props.editedIds.indexOf(rowInfo.row.id) > -1) {
                 style.background = '#c8e6c9';
               }
               return {
-                style, onDoubleClick: (e, handleOriginal) => {
+                style, onDoubleClick: (e, handleOriginal) => {      
                   this.props.dispatch(getAdminInfo(rowInfo.row));
                   this.setState({ showAdmin: true })
                 },
-                onClick: (e,handleOriginal)=>{
+                /* onClick: (e,handleOriginal)=>{
                   //alert(rowInfo.row.id)
                   this.setState({ selection: [rowInfo.row.id]})
-                }
+                } */
               }
             }
           }
@@ -267,8 +272,9 @@ class Admin extends Component {
 //获取admin记录集及修改记录ＩＤ数组
 const mapStateToProps = (state) => {
   let admins = state.admins
+  console.log(admins)
   let editedIds = state.editedIds
-  let confirmDel=state.confirm.module==='admin'?state.confirm.confirm:false 
+  let confirmDel=state.confirm.module==='admin'&&state.confirm.operate==='del'?state.confirm.confirm:false 
   return { admins, editedIds,confirmDel}
 }
 
