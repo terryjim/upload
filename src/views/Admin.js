@@ -18,7 +18,7 @@ class Admin extends Component {
     //每次打开时清除页面修改痕迹
     this.props.dispatch(clearEditedIds())
     //获取分页列表
-    this.props.dispatch(getAdmin({ page: 0, size: 10 }))
+   // this.props.dispatch(getAdmin({ page: 0, size: 10 }))
   }
   componentWillReceiveProps(nextProps) {
     //确认删除记录操作
