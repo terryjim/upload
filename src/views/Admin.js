@@ -18,7 +18,7 @@ class Admin extends Component {
     //每次打开时清除页面修改痕迹
     this.props.dispatch(clearEditedIds())
     //获取分页列表
-   // this.props.dispatch(getAdmin({ page: 0, size: 10 }))
+    // this.props.dispatch(getAdmin({ page: 0, size: 10 }))
   }
   componentWillReceiveProps(nextProps) {
     //确认删除记录操作
@@ -127,11 +127,11 @@ class Admin extends Component {
             width: `{row.value}%`,
             height: "100%",
             backgroundColor:
-              row.value > 10
-                ? "#85cc00"
-                : row.value > 50
-                  ? "#ffbf00"
-                  : "#ff2e00",
+            row.value > 10
+              ? "#85cc00"
+              : row.value > 50
+                ? "#ffbf00"
+                : "#ff2e00",
             borderRadius: "2px",
             transition: "all .2s ease-out"
           }}
@@ -142,6 +142,7 @@ class Admin extends Component {
     Header: '',
     sortable: false,
     width: 60,
+    filterable: false,
     Cell: (c) => (<div>
       <a className="fa fa-edit fa-lg mt-4"
         onClick={
@@ -207,7 +208,13 @@ class Admin extends Component {
           /* onPageChange={(pageIndex) => this.props.dispatch(getAdmin({page:pageIndex,size:10}))}  */
           manual // Forces table not to paginate or sort automatically, so we can handle it server-side
           onFetchData={(state, instance) => {
-            this.props.dispatch(getAdmin({ page: state.page, size: 10 }))
+            console.log('$$$$$$$$$$$$______________________')
+            console.log(state)
+            let whereSql = ''
+            state.filtered.forEach(
+              v => whereSql = whereSql + ' and ' + v.id + ' like \'%' + v.value + '%\''
+            )
+            this.props.dispatch(getAdmin({ whereSql, page: state.page, size: 10 }))
           }}
           getTrProps={
             (state, rowInfo, column, instance) => {

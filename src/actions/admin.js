@@ -1,13 +1,13 @@
 import { showError, showSuccess, addEditedIds, closeConfirm } from "./common";
 
 //获取管理员列表
-export const getAdmin = ({ page, size }) => dispatch => {
+export const getAdmin = ({ whereSql,page, size }) => dispatch => {
   //不能用headers=new Headers()，否则跨域出错
   /*let headers = { 'Content-Type': 'application/x-www-form-urlencoded' };*/
   let headers = { 'Content-Type': 'application/json' };
 
   //headers.Authorization = WebIM.config.tokenLocal
-  let body = JSON.stringify({ page, size })
+  let body = JSON.stringify({ whereSql,page, size })
   let args = { method: 'POST', mode: 'cors', body, headers: headers, cache: 'reload' }
 
   // return dispatch(logined('qwerfasdfasdfasdfasdfasfd'))
