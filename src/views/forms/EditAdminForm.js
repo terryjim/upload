@@ -3,6 +3,23 @@ import { Field, reduxForm } from 'redux-form';
 import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardHeader, CardBody, Form, FormGroup, InputGroup, InputGroupAddon, Input } from 'reactstrap';
 import { connect } from 'react-redux'
 import {showError } from '../../actions/common'
+import DropzoneComponent from 'react-dropzone-component'
+import 'react-dropzone-component/styles/filepicker.css'
+import 'dropzone/dist/min/dropzone.min.css'
+const djsConfig = {
+  addRemoveLinks: true,
+  acceptedFiles: "image/jpeg,image/png,image/gif",
+ /*  params: {
+    OSSAccessKeyId: "LTAIxtqoPGrMU8Ob",
+    Expires:new Date().getTime()+60000,
+    Signature:''
+} */
+}
+const componentConfig = {
+  iconFiletypes: ['.jpg', '.png', '.gif'],
+  showFiletypeIcon: true,
+  postUrl: 'http://localhost/admin/upload'
+}
 const validate = values => {
   const errors = {}
   if (!values.loginName) {
@@ -99,8 +116,9 @@ let EditAdminForm = props => {
             label="真实姓名"
           />
           
-       {/*  </div>
-      </div> */}
+          <DropzoneComponent config={componentConfig}
+                      /*  eventHandlers={eventHandlers} */
+                       djsConfig={djsConfig} />
       {error && <strong>{error}</strong>}
       <div>
         <button type="submit" disabled={pristine || submitting}>

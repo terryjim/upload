@@ -9,9 +9,9 @@
     "gulp-sass": "^2.3.2",
     "node-sass": "^4.8.3",
     "react-scripts": "1.0.6",
-    "sass-loader": "^6.0.7" 
+    "sass-loader": "^6.0.7"
   },
-  "dependencies": { 
+  "dependencies": {
     "chart.js": "2.5.0",
     "history": "^4.6.1",
     "react": "^15.5.4",
@@ -21,6 +21,7 @@
     "react-bootstrap-table2-paginator": "^0.1.1",
     "react-chartjs-2": "2.1.0",
     "react-dom": "15.5.4",
+    "react-dropzone-component": "^3.2.0",
     "react-redux": "^5.0.5",
     "react-router-dom": "4.1.1",
     "react-router-redux": "4.0.8",
