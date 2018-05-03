@@ -2,18 +2,21 @@ import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardHeader, CardBody, Form, FormGroup, InputGroup, InputGroupAddon, Input } from 'reactstrap';
 import { connect } from 'react-redux'
-import { showError } from '../../actions/common'
-import { getOss } from '../../actions/oss'
+import {showError } from '../../actions/common'
 import DropzoneComponent from 'react-dropzone-component'
 import 'react-dropzone-component/styles/filepicker.css'
 import 'dropzone/dist/min/dropzone.min.css'
 
-
+//本地上传图片
+const djsConfig = {
+  addRemoveLinks: true,  
+  method:"post",
+  paramName:"multipartFiles",  
+}
 const componentConfig = {
-  // iconFiletypes: ['.jpg', '.png', '.gif'],
+ // iconFiletypes: ['.jpg', '.png', '.gif'],
   showFiletypeIcon: true,
-  postUrl: 'http://bluechips.oss-cn-hangzhou.aliyuncs.com',
-
+  postUrl: 'http://localhost/admin/upload'
 }
 const validate = values => {
   const errors = {}
@@ -37,9 +40,9 @@ const validate = values => {
 
 const warn = values => {
   const warnings = {}
-  /*  if (values.loginName.length() >10) {
-     warnings.loginName = '你年龄还有点小哦！'
-   } */
+ /*  if (values.loginName.length() >10) {
+    warnings.loginName = '你年龄还有点小哦！'
+  } */
   return warnings
 }
 
@@ -55,38 +58,21 @@ const warn = values => {
         </div>
       </div> */}
 
-const renderField = ({ input, label, type, meta: { touched, error } }) => (
-  <div>
-    <label>{label}</label>
-    <div>
-      <input {...input} placeholder={label} type={type} />
-      {touched && error && <span>{error}</span>}
-    </div>
-  </div>
-)
+      const renderField = ({ input, label, type, meta: { touched, error } }) => (
+        <div>
+          <label>{label}</label>
+          <div>
+            <input {...input} placeholder={label} type={type} />
+            {touched && error && <span>{error}</span>}
+          </div>
+        </div>
+      )
 
-let EditAdminForm = props => {
-  const { dispatch, error, handleSubmit, pristine, reset, submitting, oss } = props;
-  const djsConfig = {
-    addRemoveLinks: true,
-    //uploadMultiple:false,
-    method: "post",
-    //paramName:"multipartFiles",
-    //acceptedFiles: "image/jpeg,image/png,image/gif",
-    params: {
-      "key": oss.dir + "${filename}", ...oss
-    }
-  }
- /*  "accessid": oss.accessid,
-  "OSSAccessKeyId": oss.OSSAccessKeyId,
-  "policy": oss.policy,
-  "signature":oss.signature,
-  "dir": oss.dir,
-  "host": oss.host,
-  "expire": oss.expire */
+let EditAdminForm = props => { 
+  const {dispatch,error,handleSubmit, pristine, reset, submitting } = props;
   return (
     <form onSubmit={handleSubmit} >
-      <Field name="id" component="input" type="hidden" label="id" />
+      <Field name="id"  component="input" type="hidden" label="id"/>
       {/* <FormGroup>
         <InputGroup>
           <InputGroupAddon >登录名称</InputGroupAddon>          
@@ -107,30 +93,30 @@ let EditAdminForm = props => {
                     <Button  disabled={pristine || submitting} onClick={reset} color="secondary">取消</Button>
                    
       </FormGroup> */}
-      {/*  <div>
+        {/*  <div>
         <label>登录名称</label>
         <div> */}
-      <Field
-        name="loginName"
-        component={renderField}
-        type="text"
-        label="登录名称"
-      />
-      {/*  </div>
+          <Field
+            name="loginName"
+            component={renderField}
+            type="text"
+            label="登录名称"
+          />
+       {/*  </div>
       </div>
       <div>
         <label>真实姓名</label>
         <div> */}
-      <Field
-        name="realName"
-        component={renderField}
-        type="text"
-        label="真实姓名"
-      />
-
-      <DropzoneComponent config={componentConfig}
-        /*  eventHandlers={eventHandlers} */
-        djsConfig={djsConfig} />
+          <Field
+            name="realName"
+            component={renderField}
+            type="text"
+            label="真实姓名"
+          />
+          
+          <DropzoneComponent config={componentConfig}
+                      /*  eventHandlers={eventHandlers} */
+                       djsConfig={djsConfig} />
       {error && <strong>{error}</strong>}
       <div>
         <button type="submit" disabled={pristine || submitting}>
@@ -139,11 +125,11 @@ let EditAdminForm = props => {
         <button type="button" disabled={pristine || submitting} onClick={reset}>
           重置还原
         </button>
-        <button type="button" onClick={() => dispatch(showError('err!!!!!!!'))}>
+        <button type="button"  onClick={()=>dispatch(showError('err!!!!!!!'))}>
           错误
         </button>
       </div>
-
+    
 
 
       {/*   <div>
@@ -169,16 +155,15 @@ let EditAdminForm = props => {
 
 
 // Decorate the form component
-EditAdminForm = reduxForm({
+EditAdminFormXXX = reduxForm({
   form: 'admin', // a unique name for this form
   validate,                // 上面定义的一个验证函数，使redux-form同步验证
   warn
 })(EditAdminForm);
-EditAdminForm = connect(
+EditAdminFormXXX = connect(
   state => ({
-    initialValues: state.adminForm.data, // pull initial values from account reducer
-    oss: state.oss
+    initialValues: state.adminForm.data // pull initial values from account reducer
   }),
   // { load: loadAccount } // bind account loading action creator
 )(EditAdminForm)
-export default EditAdminForm;
+export default EditAdminFormXXX;

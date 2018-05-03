@@ -16,7 +16,8 @@ const defaultUrl = "http://localhost/"
 const defaultParams = {
     getAdminUrl: defaultUrl + 'admin/getByPage',
     saveAdminUrl: defaultUrl + 'admin/save',
-    delAdminUrl: defaultUrl + 'admin/del'
+    delAdminUrl: defaultUrl + 'admin/del',
+    getOssUrl: defaultUrl + 'oss/getParams'
 }
 window.defaultParams = defaultParams
 

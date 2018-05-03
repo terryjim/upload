@@ -18,22 +18,24 @@ import Page500 from './views/Pages/Page500/'
 import ChgPwd from './views/Pages/ChgPwd/'
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css'
 import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
-import 'react-table/react-table.css' 
+import 'react-table/react-table.css'
+import {getOss} from './actions/oss'
 const history = createBrowserHistory();
 const store = createStore(reducers, undefined,
-    compose(
-        applyMiddleware(thunk),
-        autoRehydrate()
-    ))
-ReactDOM.render(<Provider  store={store}>
+  compose(
+    applyMiddleware(thunk),
+    autoRehydrate()
+  ))
+setInterval(() => store.dispatch(getOss(), 5000))   //定时获取oss信息
+ReactDOM.render(<Provider store={store}>
   <HashRouter history={history}>
     <Switch>
-      <Route exact path="/login" name="Login Page" component={Login}/>
-      <Route exact path="/full" name="Full" component={Full}/>
-      <Route exact path="/404" name="Page 404" component={Page404}/>
-      <Route exact path="/500" name="Page 500" component={Page500}/>
-      <Route exact path="/chgPwd" name="Page 500" component={ChgPwd}/>
-      <Route path="/" name="Home" component={Full}/>
+      <Route exact path="/login" name="Login Page" component={Login} />
+      <Route exact path="/full" name="Full" component={Full} />
+      <Route exact path="/404" name="Page 404" component={Page404} />
+      <Route exact path="/500" name="Page 500" component={Page500} />
+      <Route exact path="/chgPwd" name="Page 500" component={ChgPwd} />
+      <Route path="/" name="Home" component={Full} />
     </Switch>
   </HashRouter>
 </Provider>, document.getElementById('root'))
