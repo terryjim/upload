@@ -84,6 +84,44 @@ let EditAdminForm = props => {
   "dir": oss.dir,
   "host": oss.host,
   "expire": oss.expire */
+  let  eventHandlers={
+    /* init: ()=>alert('init'),
+    // All of these receive the event as first parameter:
+    drop: ()=>alert('drop'),
+    dragstart: ()=>alert('dragstart'),
+    dragend: ()=>alert('dragend'),
+    dragenter: ()=>alert('dragenter'),
+    dragover: ()=>alert('dragover'),
+    dragleave:()=>alert('dragleave'),
+    // All of these receive the file as first parameter:
+    addedfile: ()=>alert('addedfile'),
+    removedfile: ()=>alert('removedfile'),
+    thumbnail: ()=>alert('thumbnail'),
+    error: ()=>alert('error'),
+    processing: ()=>alert('processing'),
+    uploadprogress: ()=>alert('uploadprogress'),
+  
+    success:()=>alert('success'),
+    complete: ()=>alert('complete'),
+    canceled: ()=>alert('canceled'),
+    maxfilesreached: ()=>alert('maxfilesreached'),
+    maxfilesexceeded: ()=>alert('maxfilesexceeded'),
+    // All of these receive a list of files as first parameter
+    // and are only called if the uploadMultiple option
+    // in djsConfig is true:
+    processingmultiple: ()=>alert('processingmultiple'),
+    sendingmultiple: ()=>alert('sendingmultiple'),
+    successmultiple: ()=>alert('successmultiple'),
+    completemultiple: ()=>alert('completemultiple'),
+    canceledmultiple: ()=>alert('canceledmultiple'),
+    // Special Events
+    totaluploadprogress: ()=>alert('totaluploadprogress'),
+    reset: ()=>alert('reset'), */
+    sending: ()=>alert('sending'),
+    queuecomplete: ()=>alert('queuecomplete'),
+
+
+  }
   return (
     <form onSubmit={handleSubmit} >
       <Field name="id" component="input" type="hidden" label="id" />
@@ -130,7 +168,9 @@ let EditAdminForm = props => {
 
       <DropzoneComponent config={componentConfig}
         /*  eventHandlers={eventHandlers} */
-        djsConfig={djsConfig} />
+        djsConfig={djsConfig} 
+        eventHandlers={eventHandlers}
+        />
       {error && <strong>{error}</strong>}
       <div>
         <button type="submit" disabled={pristine || submitting}>
