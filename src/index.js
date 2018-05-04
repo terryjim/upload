@@ -26,7 +26,7 @@ const store = createStore(reducers, undefined,
     applyMiddleware(thunk),
     autoRehydrate()
   ))
-setInterval(() => store.dispatch(getOss(), 5000))   //定时获取oss信息
+setInterval(() => store.dispatch(getOss(), 1000*60*30))   //定时获取oss信息
 ReactDOM.render(<Provider store={store}>
   <HashRouter history={history}>
     <Switch>

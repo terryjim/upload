@@ -5,13 +5,15 @@ let sample = [{
             "id": 1,
             "loginName": "admin",
             "realName": "管理员",
-            "regDate": "2018-04-03 21:28:41"
+            "regDate": "2018-04-03 21:28:41",
+            "files":""
         },
         {
             "id": 2,
             "loginName": "guest",
             "realName": "游客",
-            "regDate": "2018-04-03 21:28:57"
+            "regDate": "2018-04-03 21:28:57",
+            "files":""
         }
     ],
     "totalElements": 2,

@@ -15,7 +15,7 @@ export const getOss = () => dispatch => {
       else
         return dispatch(getOssResult(json.data))
     }).catch(e => {
-      return dispatch(showError('系统异常，请稍后再试！<br/>' + e))
+      return dispatch(showError('服务器连接异常，请稍后再试！<br/>' + e))
     }
     )
 }

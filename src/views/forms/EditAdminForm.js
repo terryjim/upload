@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm,change } from 'redux-form';
 import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardHeader, CardBody, Form, FormGroup, InputGroup, InputGroupAddon, Input } from 'reactstrap';
 import { connect } from 'react-redux'
 import { showError } from '../../actions/common'
@@ -15,6 +15,8 @@ const componentConfig = {
   postUrl: 'http://bluechips.oss-cn-hangzhou.aliyuncs.com',
 
 }
+let uploading = false//上传状态
+let uploadFiles = "abc" //上传文件列表
 const validate = values => {
   const errors = {}
   if (!values.loginName) {
@@ -22,7 +24,13 @@ const validate = values => {
   }
   if (!values.realName) {
     errors.realName = '用户名不能为空'
-  } /* else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+  }
+  if (uploading) {
+    errors.uploading_oss_flag = '文件正在上传中，请稍后再试或取消文件上传'
+  }
+ /*  if (uploadFiles !== '')
+    values.files = uploadFiles */
+  /* else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
     errors.email = 'Invalid email address'
   } */
   /*  if (!values.age) {
@@ -66,7 +74,7 @@ const renderField = ({ input, label, type, meta: { touched, error } }) => (
 )
 
 let EditAdminForm = props => {
-  const { dispatch, error, handleSubmit, pristine, reset, submitting, oss } = props;
+  const {change,dispatch, error, handleSubmit, pristine, reset, submitting, oss } = props;
   const djsConfig = {
     addRemoveLinks: true,
     //uploadMultiple:false,
@@ -77,103 +85,92 @@ let EditAdminForm = props => {
       "key": oss.dir + "${filename}", ...oss
     }
   }
- /*  "accessid": oss.accessid,
-  "OSSAccessKeyId": oss.OSSAccessKeyId,
-  "policy": oss.policy,
-  "signature":oss.signature,
-  "dir": oss.dir,
-  "host": oss.host,
-  "expire": oss.expire */
-  let  eventHandlers={
-    /* init: ()=>alert('init'),
+  /*  "accessid": oss.accessid,
+   "OSSAccessKeyId": oss.OSSAccessKeyId,
+   "policy": oss.policy,
+   "signature":oss.signature,
+   "dir": oss.dir,
+   "host": oss.host,
+   "expire": oss.expire */
+  let eventHandlers = {
+    //init: ()=>alert('init'),
     // All of these receive the event as first parameter:
-    drop: ()=>alert('drop'),
-    dragstart: ()=>alert('dragstart'),
-    dragend: ()=>alert('dragend'),
-    dragenter: ()=>alert('dragenter'),
-    dragover: ()=>alert('dragover'),
-    dragleave:()=>alert('dragleave'),
+    //drop: ()=>alert('drop'),
+    //dragstart: ()=>alert('dragstart'),
+    //dragend: ()=>alert('dragend'),
+    //dragenter: ()=>alert('dragenter'),
+    //dragover: ()=>alert('dragover'),
+    //dragleave:()=>alert('dragleave'),
     // All of these receive the file as first parameter:
-    addedfile: ()=>alert('addedfile'),
-    removedfile: ()=>alert('removedfile'),
-    thumbnail: ()=>alert('thumbnail'),
-    error: ()=>alert('error'),
-    processing: ()=>alert('processing'),
-    uploadprogress: ()=>alert('uploadprogress'),
-  
-    success:()=>alert('success'),
-    complete: ()=>alert('complete'),
-    canceled: ()=>alert('canceled'),
-    maxfilesreached: ()=>alert('maxfilesreached'),
-    maxfilesexceeded: ()=>alert('maxfilesexceeded'),
+    addedfile: () => uploading = true,
+    removedfile: () => alert('removedfile'),
+    thumbnail: () => alert('thumbnail'),
+    error: () => alert('文件上传失败'),
+    processing: () => alert('processing'),
+    // uploadprogress: ()=>alert('uploadprogress'),  
+    success: (file) => {
+      if (uploadFiles === ''){
+        uploadFiles = file.name
+      }
+      else
+        uploadFiles += ',' + file.name
+       // this.setState({files:uploadFiles})   
+        this.props.change('files', uploadFiles)   
+    },
+    complete: () => alert('complete'),
+    canceled: () => alert('canceled'),
+    maxfilesreached: () => alert('maxfilesreached'),
+    maxfilesexceeded: () => alert('maxfilesexceeded'),
     // All of these receive a list of files as first parameter
     // and are only called if the uploadMultiple option
     // in djsConfig is true:
-    processingmultiple: ()=>alert('processingmultiple'),
-    sendingmultiple: ()=>alert('sendingmultiple'),
-    successmultiple: ()=>alert('successmultiple'),
-    completemultiple: ()=>alert('completemultiple'),
-    canceledmultiple: ()=>alert('canceledmultiple'),
+    processingmultiple: () => alert('processingmultiple'),
+    sendingmultiple: () => alert('sendingmultiple'),
+    successmultiple: () => alert('successmultiple'),
+    completemultiple: () => alert('completemultiple'),
+    canceledmultiple: () => alert('canceledmultiple'),
     // Special Events
-    totaluploadprogress: ()=>alert('totaluploadprogress'),
-    reset: ()=>alert('reset'), */
-    sending: ()=>alert('sending'),
-    queuecomplete: ()=>alert('queuecomplete'),
+    // totaluploadprogress: ()=>alert('totaluploadprogress'),
+    reset: () => alert('reset'),
+    sending: () => uploading = true,
+    queuecomplete: () => uploading = false,
 
 
   }
   return (
     <form onSubmit={handleSubmit} >
       <Field name="id" component="input" type="hidden" label="id" />
-      {/* <FormGroup>
-        <InputGroup>
-          <InputGroupAddon >登录名称</InputGroupAddon>          
-          <Field name="loginName" component="Input" type="text" />
-          <InputGroupAddon><i className="fa fa-user"></i></InputGroupAddon>
-        </InputGroup>
-      </FormGroup>
-      <FormGroup>
-        <InputGroup>
-          <InputGroupAddon >真实姓名</InputGroupAddon>         
-          <Field name="realName" component="input" type="text" />
-          <InputGroupAddon><i className="fa fa-user"></i></InputGroupAddon>
-        </InputGroup>
-      </FormGroup>
-
-      <FormGroup className="form-actions">
-        <button type="submit"  disabled={pristine || submitting} >保存</button>&nbsp;&nbsp;
-                    <Button  disabled={pristine || submitting} onClick={reset} color="secondary">取消</Button>
-                   
-      </FormGroup> */}
-      {/*  <div>
-        <label>登录名称</label>
-        <div> */}
       <Field
         name="loginName"
         component={renderField}
         type="text"
         label="登录名称"
       />
-      {/*  </div>
-      </div>
-      <div>
-        <label>真实姓名</label>
-        <div> */}
+
       <Field
         name="realName"
         component={renderField}
         type="text"
         label="真实姓名"
       />
+      <Field
+        name="uploading_oss_flag"
+        component={renderField}
+        type="hidden"
+        label="附件上传"
+      />
+
 
       <DropzoneComponent config={componentConfig}
         /*  eventHandlers={eventHandlers} */
-        djsConfig={djsConfig} 
+        djsConfig={djsConfig}
         eventHandlers={eventHandlers}
-        />
+      />
       {error && <strong>{error}</strong>}
+
+      <Field name="files" component="input" type="test" label="files"/*  value={uploadFiles} */ />
       <div>
-        <button type="submit" disabled={pristine || submitting}>
+        <button type="submit" disabled={pristine || submitting || uploading}>
           提交
         </button>
         <button type="button" disabled={pristine || submitting} onClick={reset}>

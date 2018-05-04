@@ -22,7 +22,7 @@ class Admin extends Component {
   }
   componentWillReceiveProps(nextProps) {
     //确认删除记录操作
-    console.log(nextProps)
+    //console.log(nextProps)
     if (nextProps.confirmDel) {
       console.log('#####################################################################333')
       this.props.dispatch(delAdmins(this.state.selection))
@@ -282,7 +282,7 @@ class Admin extends Component {
 //获取admin记录集及修改记录ＩＤ数组
 const mapStateToProps = (state) => {
   let admins = state.admins
-  console.log(admins)
+  //console.log(admins)
   let editedIds = state.editedIds
   let confirmDel = state.confirm.module === 'admin' && state.confirm.operate === 'del' ? state.confirm.confirm : false
   return { admins, editedIds, confirmDel }
