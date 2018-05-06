@@ -19,14 +19,15 @@ import ChgPwd from './views/Pages/ChgPwd/'
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css'
 import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
 import 'react-table/react-table.css'
-import {getOss} from './actions/oss'
+import { getOss } from './actions/oss'
 const history = createBrowserHistory();
 const store = createStore(reducers, undefined,
   compose(
     applyMiddleware(thunk),
     autoRehydrate()
   ))
-setInterval(() => store.dispatch(getOss(), 1000*60*30))   //定时获取oss信息
+store.dispatch(getOss())
+setInterval(() => store.dispatch(getOss()), 1000 * 60 * 30)   //定时获取oss信息
 ReactDOM.render(<Provider store={store}>
   <HashRouter history={history}>
     <Switch>

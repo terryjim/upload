@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Field, reduxForm,change } from 'redux-form';
+import { Field, reduxForm,change} from 'redux-form';
 import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardHeader, CardBody, Form, FormGroup, InputGroup, InputGroupAddon, Input } from 'reactstrap';
 import { connect } from 'react-redux'
 import { showError } from '../../actions/common'
-import { getOss } from '../../actions/oss'
+
 import DropzoneComponent from 'react-dropzone-component'
 import 'react-dropzone-component/styles/filepicker.css'
 import 'dropzone/dist/min/dropzone.min.css'
@@ -16,7 +16,7 @@ const componentConfig = {
 
 }
 let uploading = false//上传状态
-let uploadFiles = "abc" //上传文件列表
+let uploadFiles = "" //上传文件列表
 const validate = values => {
   const errors = {}
   if (!values.loginName) {
@@ -28,9 +28,8 @@ const validate = values => {
   if (uploading) {
     errors.uploading_oss_flag = '文件正在上传中，请稍后再试或取消文件上传'
   }
- /*  if (uploadFiles !== '')
-    values.files = uploadFiles */
-  /* else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+  //values.files=uploadFiles
+      /* else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
     errors.email = 'Invalid email address'
   } */
   /*  if (!values.age) {
@@ -74,7 +73,7 @@ const renderField = ({ input, label, type, meta: { touched, error } }) => (
 )
 
 let EditAdminForm = props => {
-  const {change,dispatch, error, handleSubmit, pristine, reset, submitting, oss } = props;
+  const {values,dispatch, error, handleSubmit, pristine, reset, submitting, oss } = props;
   const djsConfig = {
     addRemoveLinks: true,
     //uploadMultiple:false,
@@ -102,20 +101,26 @@ let EditAdminForm = props => {
     //dragover: ()=>alert('dragover'),
     //dragleave:()=>alert('dragleave'),
     // All of these receive the file as first parameter:
-    addedfile: () => uploading = true,
+    //addedfile: () => uploading = true,
+    addedfile:(file) => {
+     /*  if (uploadFiles === ''){
+        uploadFiles = file.name
+      }
+      else
+        uploadFiles += ',' + file.name   
+        dispatch(change('admin', 'files', uploadFiles)) */
+     
+       // values.files=uploadFiles
+       // EditAdminForm.validate(EditAdminForm.values)
+    },
     removedfile: () => alert('removedfile'),
     thumbnail: () => alert('thumbnail'),
     error: () => alert('文件上传失败'),
     processing: () => alert('processing'),
     // uploadprogress: ()=>alert('uploadprogress'),  
     success: (file) => {
-      if (uploadFiles === ''){
-        uploadFiles = file.name
-      }
-      else
-        uploadFiles += ',' + file.name
-       // this.setState({files:uploadFiles})   
-        this.props.change('files', uploadFiles)   
+      uploadFiles === ''?uploadFiles = file.name:uploadFiles += ',' + file.name 
+      dispatch(change('admin', 'files', uploadFiles))   
     },
     complete: () => alert('complete'),
     canceled: () => alert('canceled'),
@@ -133,7 +138,7 @@ let EditAdminForm = props => {
     // totaluploadprogress: ()=>alert('totaluploadprogress'),
     reset: () => alert('reset'),
     sending: () => uploading = true,
-    queuecomplete: () => uploading = false,
+    queuecomplete: () => {uploading = false,alert(uploading)}
 
 
   }
@@ -168,9 +173,9 @@ let EditAdminForm = props => {
       />
       {error && <strong>{error}</strong>}
 
-      <Field name="files" component="input" type="test" label="files"/*  value={uploadFiles} */ />
+      <Field name="files" component="input" type="test" label="files"/>
       <div>
-        <button type="submit" disabled={pristine || submitting || uploading}>
+        <button type="submit" disabled={pristine || submitting || !uploading}>
           提交
         </button>
         <button type="button" disabled={pristine || submitting} onClick={reset}>
@@ -214,7 +219,7 @@ EditAdminForm = reduxForm({
 EditAdminForm = connect(
   state => ({
     initialValues: state.adminForm.data, // pull initial values from account reducer
-    oss: state.oss
+    oss: state.oss,
   }),
   // { load: loadAccount } // bind account loading action creator
 )(EditAdminForm)

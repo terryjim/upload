@@ -13,8 +13,10 @@ let sample = {
 const oss = (state = {}, action) => {
     if (action.type === 'GET_OSS') {          
         if (action.data != null)
-            state = Object.assign({},action.data)        
+            state = Object.assign({},action.data)  
+        console.log(state)      
     }    
+   
     return state;
 }
 export default oss;

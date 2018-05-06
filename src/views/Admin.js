@@ -105,7 +105,6 @@ class Admin extends Component {
     });
   }
   submit = (values) => {
-    // Do something with the form values        
     this.props.dispatch(saveAdmin(values))
     this.setState({ showEditAdmin: false })
   }
@@ -249,7 +248,7 @@ class Admin extends Component {
                   className={'modal-primary ' + this.props.className}>
                   <ModalHeader toggle={() => this.toggleShowEditAdmin()}>修改用户</ModalHeader>
                   <ModalBody>
-                    <EditAdminForm onSubmit={this.submit} />
+                    <EditAdminForm onSubmit={this.submit}/>
                   </ModalBody>
                   {/*   <ModalFooter>
                                 <Button color="primary" onClick={this.toggleShowEditAdmin}>Do Something</Button>{' '}
