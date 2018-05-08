@@ -5,11 +5,10 @@ let sample =
     'realName':'',
     'regDate':''}
 
-const adminForm = (state = sample, action) => {
-    if (action.type === 'GET_ADMIN_INFO') {
+const cForm = (state = sample, action) => {
+    if (action.type === 'FILL_FORM') {
        return {data:action.data}
     }
     return state;
-
 }
-export default adminForm;
+export default cForm;

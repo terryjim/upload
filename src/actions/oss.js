@@ -4,12 +4,9 @@ import { showError, showSuccess, addEditedIds, closeConfirm } from "./common";
 export const getOss = () => dispatch => {
   //不能用headers=new Headers()，否则跨域出错
   /*let headers = { 'Content-Type': 'application/x-www-form-urlencoded' };*/
-
   let headers = { 'Content-Type': 'application/json' };
   let args = { method: 'POST', mode: 'cors', headers: headers, cache: 'reload' }
-
-  // return dispatch(logined('qwerfasdfasdfasdfasdfasfd'))
-  return fetch(window.defaultParams.getOssUrl, args).then(response => response.json())
+  return fetch(window.TParams.urls.get_oss_params, args).then(response => response.json())
     .then(json => {
       if (json.code !== 0)
         return dispatch(showError(json.msg + '<br>' + json.data))

@@ -56,7 +56,7 @@ ShowAdminForm = reduxForm({
 })(ShowAdminForm);
 ShowAdminForm = connect(
   state => ({
-    initialValues: state.adminForm.data // pull initial values from account reducer
+    initialValues: state.cForm.data // pull initial values from account reducer
   }),
   // { load: loadAccount } // bind account loading action creator
 )(ShowAdminForm)

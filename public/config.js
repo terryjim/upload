@@ -13,11 +13,14 @@ SMS.config = {
     rate: 10
 }
 const defaultUrl = "http://localhost/"
-const defaultParams = {
-    getAdminUrl: defaultUrl + 'admin/getByPage',
-    saveAdminUrl: defaultUrl + 'admin/save',
-    delAdminUrl: defaultUrl + 'admin/del',
-    getOssUrl: defaultUrl + 'oss/getParams'
+const TParams = {
+    defaultUrl,
+    urls: {
+        get_admin_list: defaultUrl + 'admin/getByPage',
+        save_admin: defaultUrl + 'admin/save',
+        del_admin: defaultUrl + 'admin/del',
+        get_oss_params: defaultUrl + 'oss/getParams'
+    }
 }
-window.defaultParams = defaultParams
+window.TParams = TParams
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Field, reduxForm,change} from 'redux-form';
+import { Field, reduxForm, change } from 'redux-form';
 import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardHeader, CardBody, Form, FormGroup, InputGroup, InputGroupAddon, Input } from 'reactstrap';
 import { connect } from 'react-redux'
 import { showError } from '../../actions/common'
@@ -15,7 +15,7 @@ const componentConfig = {
   postUrl: 'http://bluechips.oss-cn-hangzhou.aliyuncs.com',
 
 }
-let uploading = false//上传状态
+
 let uploadFiles = "" //上传文件列表
 const validate = values => {
   const errors = {}
@@ -25,20 +25,9 @@ const validate = values => {
   if (!values.realName) {
     errors.realName = '用户名不能为空'
   }
-  if (uploading) {
+  if (values.uploading) {
     errors.uploading_oss_flag = '文件正在上传中，请稍后再试或取消文件上传'
   }
-  //values.files=uploadFiles
-      /* else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-    errors.email = 'Invalid email address'
-  } */
-  /*  if (!values.age) {
-     errors.age = '年龄不能为空'
-   } else if (isNaN(Number(values.age))) {
-     errors.age = '年龄必须是一个数字'
-   } else if (Number(values.age) < 18) {
-     errors.age = '对不起，你未满18岁'
-   } */
   return errors
 }
 
@@ -73,7 +62,7 @@ const renderField = ({ input, label, type, meta: { touched, error } }) => (
 )
 
 let EditAdminForm = props => {
-  const {values,dispatch, error, handleSubmit, pristine, reset, submitting, oss } = props;
+  const { values, dispatch, error, handleSubmit, pristine, reset, submitting, oss } = props;
   const djsConfig = {
     addRemoveLinks: true,
     //uploadMultiple:false,
@@ -102,25 +91,35 @@ let EditAdminForm = props => {
     //dragleave:()=>alert('dragleave'),
     // All of these receive the file as first parameter:
     //addedfile: () => uploading = true,
-    addedfile:(file) => {
-     /*  if (uploadFiles === ''){
-        uploadFiles = file.name
-      }
-      else
-        uploadFiles += ',' + file.name   
-        dispatch(change('admin', 'files', uploadFiles)) */
-     
-       // values.files=uploadFiles
-       // EditAdminForm.validate(EditAdminForm.values)
+    addedfile: (file) => {
+      /*  if (uploadFiles === ''){
+         uploadFiles = file.name
+       }
+       else
+         uploadFiles += ',' + file.name   
+         dispatch(change('admin', 'files', uploadFiles)) */
+
+      // values.files=uploadFiles
+      // EditAdminForm.validate(EditAdminForm.values)
     },
-    removedfile: () => alert('removedfile'),
-    thumbnail: () => alert('thumbnail'),
+    removedfile: (file) => {
+      if (uploadFiles.length > 0) {
+        let tempFiles = uploadFiles.split(',')
+        let index = tempFiles.indexOf(file.name)
+        if (index > -1) {
+          tempFiles.splice(index, 1)
+          uploadFiles = tempFiles.join(',')
+          dispatch(change('admin', 'files', uploadFiles))
+        }
+      }
+    } ,
+    //thumbnail: () => alert('thumbnail'),
     error: () => alert('文件上传失败'),
-    processing: () => alert('processing'),
+    //processing: () => alert('processing'),
     // uploadprogress: ()=>alert('uploadprogress'),  
     success: (file) => {
-      uploadFiles === ''?uploadFiles = file.name:uploadFiles += ',' + file.name 
-      dispatch(change('admin', 'files', uploadFiles))   
+      uploadFiles === '' ? uploadFiles = file.name : uploadFiles += ',' + file.name
+      dispatch(change('admin', 'files', uploadFiles))
     },
     complete: () => alert('complete'),
     canceled: () => alert('canceled'),
@@ -129,16 +128,18 @@ let EditAdminForm = props => {
     // All of these receive a list of files as first parameter
     // and are only called if the uploadMultiple option
     // in djsConfig is true:
-    processingmultiple: () => alert('processingmultiple'),
-    sendingmultiple: () => alert('sendingmultiple'),
-    successmultiple: () => alert('successmultiple'),
-    completemultiple: () => alert('completemultiple'),
-    canceledmultiple: () => alert('canceledmultiple'),
+   // processingmultiple: () => alert('processingmultiple'),
+   // sendingmultiple: () => alert('sendingmultiple'),
+   // successmultiple: () => alert('successmultiple'),
+   // completemultiple: () => alert('completemultiple'),
+   // canceledmultiple: () => alert('canceledmultiple'),
     // Special Events
     // totaluploadprogress: ()=>alert('totaluploadprogress'),
-    reset: () => alert('reset'),
-    sending: () => uploading = true,
-    queuecomplete: () => {uploading = false,alert(uploading)}
+    //reset: () => alert('reset'),全部清空调用reset方法
+    sending: () => {
+      dispatch(change('admin', 'uploading', true))
+    },
+    queuecomplete: () => { dispatch(change('admin', 'uploading', false)) }
 
 
   }
@@ -165,17 +166,21 @@ let EditAdminForm = props => {
         label="附件上传"
       />
 
-
       <DropzoneComponent config={componentConfig}
         /*  eventHandlers={eventHandlers} */
         djsConfig={djsConfig}
         eventHandlers={eventHandlers}
       />
       {error && <strong>{error}</strong>}
-
-      <Field name="files" component="input" type="test" label="files"/>
+      <Field
+        name="uploading"
+        component={renderField}
+        type="hidden"
+        label=""
+      />
+      <Field name="files" component="input" type="text" label="files" />
       <div>
-        <button type="submit" disabled={pristine || submitting || !uploading}>
+        <button type="submit" disabled={pristine || submitting}>
           提交
         </button>
         <button type="button" disabled={pristine || submitting} onClick={reset}>
@@ -218,7 +223,7 @@ EditAdminForm = reduxForm({
 })(EditAdminForm);
 EditAdminForm = connect(
   state => ({
-    initialValues: state.adminForm.data, // pull initial values from account reducer
+    initialValues: state.cForm.data, // pull initial values from account reducer
     oss: state.oss,
   }),
   // { load: loadAccount } // bind account loading action creator
