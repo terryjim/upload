@@ -3,7 +3,8 @@ import { Field, reduxForm, change } from 'redux-form';
 import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardHeader, CardBody, Form, FormGroup, InputGroup, InputGroupAddon, Input } from 'reactstrap';
 import { connect } from 'react-redux'
 import { showError } from '../../actions/common'
-
+import {inputField} from '../../components/field'
+import Cities from '../../components/Cities'
 import DropzoneComponent from 'react-dropzone-component'
 import 'react-dropzone-component/styles/filepicker.css'
 import 'dropzone/dist/min/dropzone.min.css'
@@ -38,31 +39,9 @@ const warn = values => {
    } */
   return warnings
 }
-
-{/* <div>
-        <label>真实姓名</label>
-        <div>
-          <Field
-            name="realName"
-            component="renderField"
-            type="text"
-            placeholder="真实姓名"
-          />
-        </div>
-      </div> */}
-
-const renderField = ({ input, label, type, meta: { touched, error } }) => (
-  <div>
-    <label>{label}</label>
-    <div>
-      <input {...input} placeholder={label} type={type} />
-      {touched && error && <span>{error}</span>}
-    </div>
-  </div>
-)
-
 let EditAdminForm = props => {
-  const { values, dispatch, error, handleSubmit, pristine, reset, submitting, oss } = props;
+  const {readOnly=false, values, dispatch, error, handleSubmit, pristine, reset, submitting, oss} = props;
+ 
   const djsConfig = {
     addRemoveLinks: true,
     //uploadMultiple:false,
@@ -140,32 +119,32 @@ let EditAdminForm = props => {
       dispatch(change('admin', 'uploading', true))
     },
     queuecomplete: () => { dispatch(change('admin', 'uploading', false)) }
-
-
+  }
+  let handleSelect=(area)=>{     
+    dispatch(change('admin', 'area', JSON.stringify({province:area.province,city:area.city,area:area.area})))
   }
   return (
     <form onSubmit={handleSubmit} >
       <Field name="id" component="input" type="hidden" label="id" />
-      <Field
+      <Field readOnly={readOnly}
         name="loginName"
-        component={renderField}
+        component={inputField}
         type="text"
         label="登录名称"
       />
-
-      <Field
+      <Field readOnly={readOnly}
         name="realName"
-        component={renderField}
+        component={inputField}
         type="text"
         label="真实姓名"
       />
-      <Field
+      <Field 
         name="uploading_oss_flag"
-        component={renderField}
+        component={inputField}
         type="hidden"
         label="附件上传"
       />
-
+      <Cities handleSelect={handleSelect}/>
       <DropzoneComponent config={componentConfig}
         /*  eventHandlers={eventHandlers} */
         djsConfig={djsConfig}
@@ -174,39 +153,27 @@ let EditAdminForm = props => {
       {error && <strong>{error}</strong>}
       <Field
         name="uploading"
-        component={renderField}
+        component={inputField}
         type="hidden"
         label=""
-      />
-      <Field name="files" component="input" type="text" label="files" />
+      /> <Field
+      name="area"
+      component={inputField}
+      type="text"
+      label=""
+    />
+      <Field name="files" component="hidden" type="text" label="files" />
       <div>
-        <button type="submit" disabled={pristine || submitting}>
+        <button hidden={readOnly} type="submit" disabled={pristine || submitting}>
           提交
         </button>
-        <button type="button" disabled={pristine || submitting} onClick={reset}>
+        <button hidden={readOnly} type="button" disabled={pristine || submitting} onClick={reset}>
           重置还原
         </button>
         <button type="button" onClick={() => dispatch(showError('err!!!!!!!'))}>
-          错误
+          关闭
         </button>
       </div>
-
-
-
-      {/*   <div>
-          <label htmlFor="firstName">First Name</label>
-          <Field name="firstName" component="input" type="text"/>
-        </div>
-        <div>
-          <label htmlFor="lastName">Last Name</label>
-          <Field name="lastName" component="input" type="text"/>
-        </div>
-        <div>
-          <label htmlFor="email">Email</label>
-          <Field name="email" component="input" type="email"/>
-        </div>
-        <button type="submit">Submit</button> */}
-
     </form>
   );
 }

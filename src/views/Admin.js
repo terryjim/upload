@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import Pages from './Pages'
-
 import { showConfirm, closeConfirm, getList, saveForm, fillForm, delList } from '../actions/common'
 import { clearEditedIds } from '../actions/common'
 import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardHeader, CardBody, Form, FormGroup, InputGroup, InputGroupAddon, Input } from 'reactstrap';
-import ShowAdminForm from './forms/ShowAdminForm'
 import EditAdminForm from './forms/EditAdminForm'
 import TopModal from '../components/TopModal'
 import ReactTable from "react-table";
@@ -108,7 +105,7 @@ class Admin extends Component {
     accessor: 'id',
     Header: 'id',
     show: false,
-    
+
   }, {
     Header: '',
     sortable: false,
@@ -143,20 +140,18 @@ class Admin extends Component {
   }, {
     accessor: 'regDate',
     Header: '注册时间',
-
   }, {
     accessor: 'files',
     Cell: row => {
       let showFiles = row.value
-      if (showFiles==='')
+      if (showFiles === '')
         showFiles.split(',').map(x => {
-        return <div><a href={`https://bluechips.oss-cn-hangzhou.aliyuncs.com/terry/` + x}>{x}</a>&nbsp;&nbsp;</div>
-      })
+          return <div><a href={`https://bluechips.oss-cn-hangzhou.aliyuncs.com/terry/` + x}>{x}</a>&nbsp;&nbsp;</div>
+        })
       //showFiles=<div>{showFiles}</div>
       return <div>{showFiles}</div>
     }
   }
-
   ];
 
   render() {
@@ -168,18 +163,6 @@ class Admin extends Component {
       toggleSelection,
       toggleAll,
       selectType: "checkbox",
-      /*  getTrProps: (s, r) => {
-         // someone asked for an example of a background color change
-         // here it is...
-         console.log(s)
-         const selected = this.isSelected(s.original._id);
-         return {
-           style: {
-             backgroundColor: selected ? "lightgreen" : "inherit"
-             // color: selected ? 'white' : 'inherit',
-           }
-         };
-       } */
     };
     let admins = this.props.admins
 
@@ -197,25 +180,32 @@ class Admin extends Component {
             state.filtered.forEach(
               v => whereSql = whereSql + ' and ' + v.id + ' like \'%' + v.value + '%\''
             )
-            
-            this.props.dispatch(getList({ whereSql, page: state.page, size:state.pageSize }, 'admin'))
+
+            this.props.dispatch(getList({ whereSql, page: state.page, size: state.pageSize }, 'admin'))
           }}
           getTrProps={
             (state, rowInfo, column, instance) => {
-              console.log(state)
-              console.log(rowInfo)
-              console.log(column)
               let style = {}
-              if ((this.props.editedIds != undefined) && rowInfo != undefined && this.props.editedIds.indexOf(rowInfo.row.id) > -1) {
+              if ((this.props.editedIds != undefined) && rowInfo != undefined && this.props.editedIds.includes(rowInfo.row.id)) {
                 style.background = '#c8e6c9';
+              }
+              if (rowInfo != undefined && this.state.selection.includes(rowInfo.row.id)) {
+                style.background = '#62c2de';
               }
               return {
                 style, onDoubleClick: (e, handleOriginal) => {
                   this.props.dispatch(fillForm(rowInfo.row));
                   this.setState({ showAdmin: true })
                 },
-                 onClick: (e,handleOriginal)=>{                  
-                  this.setState({ selection: [rowInfo.row.id]})
+                onClick: (e, handleOriginal) => {
+                  if (e.ctrlKey) {
+                    this.setState({ selection: [rowInfo.row.id, ...this.state.selection] })
+                  } else {
+                    if (this.state.selection.includes(rowInfo.row.id))
+                      this.setState({ selection: [] })
+                    else
+                      this.setState({ selection: [rowInfo.row.id] })
+                  }
                 }
               }
             }
@@ -237,31 +227,22 @@ class Admin extends Component {
                   <ModalBody>
                     <EditAdminForm onSubmit={this.submit} />
                   </ModalBody>
-                  {/*   <ModalFooter>
-                                <Button color="primary" onClick={this.toggleShowEditAdmin}>Do Something</Button>{' '}
-                                <Button color="secondary" onClick={this.toggleShowEditAdmin}>Cancel</Button>
-                              </ModalFooter> */}
                 </TopModal>
                 <TopModal isOpen={this.state.showAdmin} toggle={() => this.toggleShowAdmin()}
                   className={'modal-primary ' + this.props.className}>
                   <ModalHeader toggle={() => this.toggleShowAdmin()}>查看记录</ModalHeader>
                   <ModalBody>
-                    <ShowAdminForm />
+                    <EditAdminForm readOnly={true}/>
                   </ModalBody>
                   <ModalFooter>
                     <Button color="primary" onClick={this.toggleShowAdmin}>确定</Button>
                   </ModalFooter>
                 </TopModal>
-
               </div>
             </div>
           </div>
-
         </div>
-
-
       </div>
-
     )
   }
 }

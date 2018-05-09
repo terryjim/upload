@@ -6,14 +6,14 @@ import { connect } from 'react-redux'
 
 
 let ShowAdminForm = props => {
-  const { dispatch, error, handleSubmit, pristine, reset, submitting } = props;
+  const { dispatch, error, handleSubmit, pristine, reset, submitting,readOnly} = props;
   return (
     <form >
       <Field name="id" component="input" type="hidden" label="id" />
       <div>
         <label>登录名称</label>
         <div>
-          <Field readOnly = "true"
+          <Field readOnly={readOnly}  
             name="realName"
             component="input"
             type="text"
@@ -23,7 +23,7 @@ let ShowAdminForm = props => {
       <div>
         <label>真实姓名</label>
         <div>
-          <Field readOnly = "true" 
+          <Field readOnly={readOnly} 
             name="loginName"
             component="input"
             type="text"
@@ -33,7 +33,7 @@ let ShowAdminForm = props => {
       <div>
         <label>注册时间</label>
         <div>
-          <Field readOnly = "true" 
+          <Field readOnly={readOnly} 
             name="regDate"
             component="input"
             type="text"

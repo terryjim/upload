@@ -12,7 +12,8 @@ import err from './err'
 import success from './success'
 import confirm from './confirm'
 import oss from './oss'
+import showForm from './showForm'
 import { reducer as formReducer } from 'redux-form'
 // export default combineReducers({user,form:formReducer,sms})
-export default combineReducers({oss,confirm,editedIds, user, sms, pages, stat, chgPwdSuccess, cList, form: formReducer, cForm, err, success })
+export default combineReducers({showForm,oss,confirm,editedIds, user, sms, pages, stat, chgPwdSuccess, cList, form: formReducer, cForm, err, success })
 
